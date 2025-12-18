@@ -78,13 +78,12 @@ npm install
 
 3. Configure environment variables in `.env`:
 ```
-MONGODB_URI=mongodb+srv://hiadityahere896:9852%40Aditya@cluster0.wwwazdi.mongodb.net/hometutor
+MONGODB_URI=mongodb+srv://name:pass@xyz.mongodb.net/db_name
 JWT_SECRET=your_jwt_secret_key_change_this_in_production_min_32_chars
 JWT_EXPIRE=30d
 PORT=5000
 RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
-FRONTEND_URL=http://localhost:3000
 ```
 
 4. Start the server:

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { teachersAPI } from '../services/api';
 import { getCurrentLocation } from '../utils/helpers';
 import TeacherCard from '../components/TeacherCard';
-import { Filter, MapPin, Search as SearchIcon, X } from 'lucide-react';
+import { Filter, MapPin, Search as SearchIcon } from 'lucide-react';
 
 const TeacherSearch = () => {
     const [teachers, setTeachers] = useState([]);
@@ -28,7 +28,7 @@ const TeacherSearch = () => {
 
     useEffect(() => {
         fetchTeachers();
-    }, [filters]);
+    }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchTeachers = async () => {
         setLoading(true);

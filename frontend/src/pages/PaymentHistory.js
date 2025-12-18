@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+
 import { paymentsAPI } from '../services/api';
-import { FileText, ArrowUpCircle } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { formatCurrency, formatDate } from '../utils/helpers';
 import { Link } from 'react-router-dom';
 
 const PaymentHistory = () => {
-    const { user } = useAuth();
+    // const { user } = useAuth();
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
 

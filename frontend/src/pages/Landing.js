@@ -257,10 +257,10 @@ const Landing = () => {
                         <div>
                             <h4 className="font-semibold text-white mb-4">Support</h4>
                             <ul className="space-y-2 text-sm">
-                                <li><a href="#" className="hover:text-primary">Help Center</a></li>
-                                <li><a href="#" className="hover:text-primary">Contact Us</a></li>
-                                <li><a href="#" className="hover:text-primary">Privacy Policy</a></li>
-                                <li><a href="#" className="hover:text-primary">Terms of Service</a></li>
+                                <li><Link to="/help" className="hover:text-primary">Help Center</Link></li>
+                                <li><Link to="/help" className="hover:text-primary">Contact Us</Link></li>
+                                <li><button className="text-left hover:text-primary bg-transparent border-none p-0 cursor-pointer text-gray-300">Privacy Policy</button></li>
+                                <li><button className="text-left hover:text-primary bg-transparent border-none p-0 cursor-pointer text-gray-300">Terms of Service</button></li>
                             </ul>
                         </div>
                     </div>

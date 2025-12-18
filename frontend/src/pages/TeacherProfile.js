@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { teachersAPI, reviewsAPI } from '../services/api';
 import { formatCurrency, stringToColor, getInitials } from '../utils/helpers';
-import { MapPin, Star, BookOpen, Clock, BadgeCheck, PlayCircle, Calendar, MessageCircle, Share2, Heart } from 'lucide-react';
+import { MapPin, Star, BookOpen, BadgeCheck, PlayCircle, MessageCircle, Share2, Heart } from 'lucide-react';
 import BookingModal from '../components/BookingModal';
 import StarRating from '../components/StarRating';
-import { useAuth } from '../context/AuthContext';
+
 
 const TeacherProfile = () => {
     const { id } = useParams();
-    const { user } = useAuth();
+    // const { user } = useAuth();
     const [teacher, setTeacher] = useState(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('about');

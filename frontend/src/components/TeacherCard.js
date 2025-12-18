@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star, MapPin, BookOpen, Clock, BadgeCheck } from 'lucide-react';
+import { Star, MapPin, BadgeCheck } from 'lucide-react';
 import { formatCurrency } from '../utils/helpers';
 
 const TeacherCard = ({ teacher }) => {

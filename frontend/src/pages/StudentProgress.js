@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { progressAPI } from '../services/api';
 import ProgressChart from '../components/ProgressChart';
-import { Calendar, CheckCircle, XCircle, FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { CheckCircle, XCircle, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const StudentProgress = () => {
@@ -107,8 +107,8 @@ const StudentProgress = () => {
                                     </div>
                                     <div className="flex items-center gap-4">
                                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${entry.performance === 'Excellent' ? 'bg-green-100 text-green-700' :
-                                                entry.performance === 'Good' ? 'bg-blue-100 text-blue-700' :
-                                                    'bg-yellow-100 text-yellow-700'
+                                            entry.performance === 'Good' ? 'bg-blue-100 text-blue-700' :
+                                                'bg-yellow-100 text-yellow-700'
                                             }`}>
                                             {entry.performance}
                                         </span>

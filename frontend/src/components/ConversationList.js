@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
-import { getInitials, stringToColor, formatDate } from '../utils/helpers';
+import { getInitials, stringToColor } from '../utils/helpers';
 
 const ConversationList = ({ conversations, selectedUser, onSelectUser, onlineUsers = [] }) => {
     const [searchTerm, setSearchTerm] = useState('');

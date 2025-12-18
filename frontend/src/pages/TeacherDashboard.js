@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, Users, DollarSign, Calendar, MessageCircle, LogOut } from 'lucide-react';
+import { BookOpen, Users, DollarSign, MessageCircle, LogOut } from 'lucide-react';
 import NotificationBell from '../components/NotificationBell';
 import EarningsChart from '../components/EarningsChart';
 import DashboardCalendar from '../components/DashboardCalendar';
@@ -17,7 +17,7 @@ const TeacherDashboard = () => {
     const navigate = useNavigate();
     const [stats, setStats] = useState({ totalEarnings: 0, chartData: [], upcomingClassesCount: 0 });
     const [bookings, setBookings] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const [selectedBookingForProgress, setSelectedBookingForProgress] = useState(null);
 
     useEffect(() => {
@@ -36,8 +36,6 @@ const TeacherDashboard = () => {
                 }
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
-            } finally {
-                setLoading(false);
             }
         };
 

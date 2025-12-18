@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { X, Calendar, Clock, CreditCard, CheckCircle } from 'lucide-react';
+import { X, Calendar, CreditCard } from 'lucide-react';
 import { bookingsAPI } from '../services/api';
-import { formatCurrency, loadScript } from '../utils/helpers';
+import { formatCurrency } from '../utils/helpers';
 import { useAuth } from '../context/AuthContext';
 
 const BookingModal = ({ teacher, isOpen, onClose }) => {

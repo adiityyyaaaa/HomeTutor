@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { bookingsAPI } from '../services/api';
-import { BookOpen, Search, Calendar, Clock, MapPin, User, ChevronRight, MessageCircle, LogOut, TrendingUp, Settings } from 'lucide-react';
+import { BookOpen, Search, Calendar, Clock, MessageCircle, LogOut, TrendingUp, Settings } from 'lucide-react';
 import { formatDate, formatCurrency } from '../utils/helpers';
 
 import DemoCompletionModal from '../components/DemoCompletionModal';

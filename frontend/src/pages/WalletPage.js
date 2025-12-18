@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+
 import { paymentsAPI } from '../services/api';
-import { Wallet, ArrowDownCircle, ArrowUpCircle, Clock, CheckCircle } from 'lucide-react';
+import { Wallet, ArrowDownCircle, ArrowUpCircle, CheckCircle } from 'lucide-react';
 import { formatCurrency, formatDate } from '../utils/helpers';
 import { Link } from 'react-router-dom';
 
 const WalletPage = () => {
-    const { user } = useAuth();
+    // const { user } = useAuth();
     const [balance, setBalance] = useState(0); // Add currency?
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -152,8 +152,8 @@ const WalletPage = () => {
                                             </td>
                                             <td className="py-3 px-4">
                                                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${tx.type === 'credit'
-                                                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                                                        : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                                                    : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                                                     }`}>
                                                     {tx.type === 'credit' ? <ArrowDownCircle className="w-3 h-3 mr-1" /> : <ArrowUpCircle className="w-3 h-3 mr-1" />}
                                                     {tx.type === 'credit' ? 'Credit' : 'Debit'}

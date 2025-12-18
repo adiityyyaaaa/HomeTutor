@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useCall } from '../context/CallContext';
-import { Phone, PhoneOff, Mic, MicOff, User } from 'lucide-react';
+import { Phone, PhoneOff, Mic, MicOff } from 'lucide-react';
 import { getInitials, stringToColor } from '../utils/helpers';
 
 const CallManager = () => {

@@ -67,7 +67,7 @@ export const CallProvider = ({ children }) => {
             // Ideally we should remove listeners on unmount.
             // keeping it simple for now.
         };
-    }, [user, socket, callStatus]);
+    }, [user, socket, callStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const startCall = async (otherUser) => {
         setCallStatus('calling');

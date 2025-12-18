@@ -14,7 +14,6 @@ const ChatPage = () => {
     const [conversations, setConversations] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
     const [messages, setMessages] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [isTyping, setIsTyping] = useState(false);
     const [onlineUsers, setOnlineUsers] = useState([]);
 
@@ -65,7 +64,7 @@ const ChatPage = () => {
                 socketService.disconnect();
             };
         }
-    }, [user, selectedUser]); // Re-bind listeners if selectedUser changes? No, closure issue.
+    }, [user, selectedUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Better way to handle socket listeners with closure state (selectedUser):
     // Use a ref for selectedUser or functional state updates.
@@ -88,7 +87,7 @@ const ChatPage = () => {
             } catch (error) {
                 console.error('Error fetching conversations:', error);
             } finally {
-                setLoading(false);
+                // setLoading(false);
             }
         };
 

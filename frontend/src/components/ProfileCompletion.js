@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, AlertCircle, Trophy } from 'lucide-react';
+import { AlertCircle, Trophy } from 'lucide-react';
 
 const ProfileCompletion = ({ user }) => {
     if (!user) return null;

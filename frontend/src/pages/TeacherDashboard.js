@@ -158,12 +158,22 @@ const TeacherDashboard = () => {
                                                 {new Date(booking.date).toLocaleDateString()} {booking.timeSlot}
                                             </td>
                                             <td className="py-2 px-4">
-                                                <button
-                                                    onClick={() => setSelectedBookingForProgress(booking)}
-                                                    className="btn btn-sm btn-outline-primary"
-                                                >
-                                                    Add Progress
-                                                </button>
+                                                <div className="flex space-x-2">
+                                                    <Link
+                                                        to="/chat"
+                                                        state={{ startChatUser: booking.studentId }}
+                                                        className="btn btn-sm btn-secondary flex items-center"
+                                                        title="Message Student"
+                                                    >
+                                                        <MessageCircle className="w-4 h-4" />
+                                                    </Link>
+                                                    <button
+                                                        onClick={() => setSelectedBookingForProgress(booking)}
+                                                        className="btn btn-sm btn-outline-primary"
+                                                    >
+                                                        Add Progress
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}

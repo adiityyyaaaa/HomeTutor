@@ -2,16 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCall } from '../context/CallContext';
 import socketService from '../services/socket';
-import { messagesAPI } from '../services/api';
+import { messagesAPI, teachersAPI } from '../services/api'; // Import teachersAPI
 import ConversationList from '../components/ConversationList';
 import ChatWindow from '../components/ChatWindow';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; // Import useLocation
 import { BookOpen } from 'lucide-react';
 
 const ChatPage = () => {
     const { user } = useAuth();
     const { startCall } = useCall();
+    const location = useLocation(); // Get location
     const [conversations, setConversations] = useState([]);
+
     const [selectedUser, setSelectedUser] = useState(null);
     const [messages, setMessages] = useState([]);
     const [isTyping, setIsTyping] = useState(false);
@@ -81,18 +83,69 @@ const ChatPage = () => {
         const fetchConversations = async () => {
             try {
                 const response = await messagesAPI.getConversations();
+                let loadedConversations = [];
                 if (response.data.success) {
-                    setConversations(response.data.conversations);
+                    loadedConversations = response.data.conversations;
+                    setConversations(loadedConversations);
+                }
+
+                // Check for new chat via state (passed from Profile/Dashboard)
+                if (location.state?.startChatUser) {
+                    const startUser = location.state.startChatUser;
+                    // Check if already in conversation
+                    const existingConv = loadedConversations.find(c => c.user._id === startUser._id);
+                    if (existingConv) {
+                        handleSelectUser(existingConv.user);
+                    } else {
+                        // Normalize user object if needed
+                        const tempUser = {
+                            _id: startUser._id,
+                            name: startUser.name || startUser.studentName, // Handle variations
+                            photo: startUser.photo,
+                            role: startUser.role || (startUser.class ? 'student' : 'teacher') // Inference fallback
+                        };
+                        setSelectedUser(tempUser);
+                    }
+                }
+                // Fallback: Check for newChatId param (legacy or direct link)
+                else {
+                    const searchParams = new URLSearchParams(location.search);
+                    const newChatId = searchParams.get('newChatId');
+
+                    if (newChatId) {
+                        // Check if conversation already exists
+                        const existingConv = loadedConversations.find(c => c.user._id === newChatId);
+                        if (existingConv) {
+                            handleSelectUser(existingConv.user);
+                        } else {
+                            // Fetch teacher details to start new chat (Teacher Profile fallback)
+                            try {
+                                const teacherRes = await teachersAPI.getById(newChatId);
+                                if (teacherRes.data.success) {
+                                    const teacher = teacherRes.data.teacher;
+                                    const tempUser = {
+                                        _id: teacher._id,
+                                        name: teacher.name,
+                                        photo: teacher.photo,
+                                        role: 'teacher'
+                                    };
+                                    setSelectedUser(tempUser);
+                                }
+                            } catch (err) {
+                                // If teacher fetch fails, it might be a student ID, but we don't have a generic getUser API yet.
+                                // For now, we rely on State for Student chats.
+                                console.error('Error fetching teacher for new chat:', err);
+                            }
+                        }
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching conversations:', error);
-            } finally {
-                // setLoading(false);
             }
         };
 
         fetchConversations();
-    }, [user]);
+    }, [user, location.search]);
 
     const updateConversationList = (message) => {
         setConversations(prev => {

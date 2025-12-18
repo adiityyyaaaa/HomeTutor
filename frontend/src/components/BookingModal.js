@@ -36,6 +36,23 @@ const BookingModal = ({ teacher, isOpen, onClose }) => {
         return teacher.monthlyRate;
     };
 
+    const verifyPayment = async (response, bookingId) => {
+        try {
+            await bookingsAPI.verifyPayment({
+                bookingId: bookingId,
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpaySignature: response.razorpay_signature
+            });
+            alert('Booking Successful!');
+            onClose();
+            // Refresh bookings if needed (parent component reload)
+            window.location.reload(); // Simple reload to show update
+        } catch (err) {
+            console.error('Verification failed', err);
+            setError('Payment verification failed');
+        }
+    };
+
     const handlePayment = async () => {
         setLoading(true);
         setError('');
@@ -50,7 +67,7 @@ const BookingModal = ({ teacher, isOpen, onClose }) => {
                 scheduledDate: selectedDate,
                 scheduledTime: selectedSlot,
                 amount: calculateAmount(),
-                address: user.address || {}, // Use user address or prompt for one
+                address: user.address || {},
                 notes: 'Booking from web app'
             };
 
@@ -59,29 +76,28 @@ const BookingModal = ({ teacher, isOpen, onClose }) => {
             if (response.data.success) {
                 const { booking, razorpayOrderId } = response.data;
 
-                // 2. Open Razorpay
+                // Check for Mock Order (Dev Mode)
+                if (razorpayOrderId.startsWith('order_mock_')) {
+                    console.log('Using Mock Payment Flow');
+                    const mockResponse = {
+                        razorpay_payment_id: `pay_mock_${Date.now()}`,
+                        razorpay_signature: 'mock_signature'
+                    };
+                    await verifyPayment(mockResponse, booking._id);
+                    return;
+                }
+
+                // 2. Open Razorpay (Real Flow)
                 const options = {
-                    key: process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_test_1234567890', // Use env or mock
+                    key: process.env.REACT_APP_RAZORPAY_KEY_ID,
                     amount: booking.amount * 100,
                     currency: 'INR',
                     name: 'HomeTutor',
                     description: `${bookingType.toUpperCase()} Session with ${teacher.name}`,
                     image: '/logo192.png',
                     order_id: razorpayOrderId,
-                    handler: async function (response) {
-                        // 3. Verify Payment
-                        try {
-                            await bookingsAPI.verifyPayment({
-                                bookingId: booking._id,
-                                razorpayPaymentId: response.razorpay_payment_id,
-                                razorpaySignature: response.razorpay_signature
-                            });
-                            alert('Booking Successful!');
-                            onClose();
-                        } catch (err) {
-                            console.error('Verification failed', err);
-                            setError('Payment verification failed');
-                        }
+                    handler: function (response) {
+                        verifyPayment(response, booking._id);
                     },
                     prefill: {
                         name: user.name,

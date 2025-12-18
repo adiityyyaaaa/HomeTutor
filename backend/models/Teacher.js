@@ -170,6 +170,11 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         default: 'teacher',
         immutable: true
+    },
+    walletBalance: {
+        type: Number,
+        default: 0,
+        min: 0
     }
 }, {
     timestamps: true

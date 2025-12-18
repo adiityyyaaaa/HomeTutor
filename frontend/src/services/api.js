@@ -112,4 +112,10 @@ export const analyticsAPI = {
     getTeacherStats: () => api.get('/analytics/teacher-stats'),
 };
 
+export const paymentsAPI = {
+    getWallet: () => api.get('/payments/wallet'),
+    getHistory: () => api.get('/payments/history'),
+    withdraw: (amount) => api.post('/payments/withdraw', { amount }),
+};
+
 export default api;

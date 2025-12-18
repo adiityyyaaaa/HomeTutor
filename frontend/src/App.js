@@ -14,6 +14,11 @@ import TeacherDashboard from './pages/TeacherDashboard';
 import TeacherSearch from './pages/TeacherSearch';
 import TeacherProfile from './pages/TeacherProfile';
 import ChatPage from './pages/ChatPage';
+import WalletPage from './pages/WalletPage';
+import PaymentHistory from './pages/PaymentHistory';
+import StudentProgress from './pages/StudentProgress';
+import SettingsPage from './pages/SettingsPage';
+import HelpPage from './pages/HelpPage';
 
 // Protected Route Component
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -97,12 +102,64 @@ function AppRoutes() {
         }
       />
 
+      {/* Protected Routes - Teacher */}
+      <Route
+        path="/teacher-dashboard"
+        element={
+          <ProtectedRoute requiredRole="teacher">
+            <TeacherDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/wallet"
+        element={
+          <ProtectedRoute requiredRole="teacher">
+            <WalletPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Protected Routes - Student */}
+      <Route
+        path="/progress"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <StudentProgress />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Protected Routes - Both */}
       <Route
         path="/chat"
         element={
           <ProtectedRoute>
             <ChatPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <SettingsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/help"
+        element={
+          <HelpPage />
+        }
+      />
+
+      {/* Payment History - Both */}
+      <Route
+        path="/payments/history"
+        element={
+          <ProtectedRoute>
+            <PaymentHistory />
           </ProtectedRoute>
         }
       />

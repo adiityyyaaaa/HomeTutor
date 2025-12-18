@@ -6,6 +6,7 @@ import NotificationBell from '../components/NotificationBell';
 import EarningsChart from '../components/EarningsChart';
 import DashboardCalendar from '../components/DashboardCalendar';
 import ProfileCompletion from '../components/ProfileCompletion';
+import ProgressReportForm from '../components/ProgressReportForm';
 import { analyticsAPI, bookingsAPI } from '../services/api';
 import { formatCurrency } from '../utils/helpers';
 
@@ -17,6 +18,7 @@ const TeacherDashboard = () => {
     const [stats, setStats] = useState({ totalEarnings: 0, chartData: [], upcomingClassesCount: 0 });
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedBookingForProgress, setSelectedBookingForProgress] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,6 +48,8 @@ const TeacherDashboard = () => {
         logout();
         navigate('/');
     };
+
+    const activeBookings = bookings.filter(b => b.bookingStatus === 'confirmed');
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -89,7 +93,6 @@ const TeacherDashboard = () => {
                 </div>
 
                 {/* Stats Grid */}
-                {/* Stats Grid */}
                 <div className="grid md:grid-cols-4 gap-6 mb-8">
                     <div className="card">
                         <div className="flex items-center justify-between">
@@ -101,7 +104,7 @@ const TeacherDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="card">
+                    <Link to="/wallet" className="card hover:shadow-lg transition-shadow cursor-pointer">
                         <div className="flex items-center justify-between">
                             <div>
                                 <p className="text-sm text-gray-600 dark:text-gray-400">Total Earnings</p>
@@ -109,7 +112,7 @@ const TeacherDashboard = () => {
                             </div>
                             <DollarSign className="w-12 h-12 text-success" />
                         </div>
-                    </div>
+                    </Link>
 
                     <div className="card">
                         <div className="flex items-center justify-between">
@@ -130,6 +133,48 @@ const TeacherDashboard = () => {
                             <MessageCircle className="w-12 h-12 text-blue-500" />
                         </div>
                     </div>
+                </div>
+
+                {/* Active Classes (For Progress Reporting) */}
+                <div className="card mb-8 scroll-mt-24" id="active-classes">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Active Classes</h2>
+                    {activeBookings.length > 0 ? (
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead>
+                                    <tr className="border-b border-gray-200 dark:border-gray-700">
+                                        <th className="py-2 px-4">Student</th>
+                                        <th className="py-2 px-4">Subject</th>
+                                        <th className="py-2 px-4">Class</th>
+                                        <th className="py-2 px-4">Schedule</th>
+                                        <th className="py-2 px-4">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {activeBookings.map(booking => (
+                                        <tr key={booking._id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                                            <td className="py-2 px-4 font-medium">{booking.studentId?.name}</td>
+                                            <td className="py-2 px-4">{booking.subject}</td>
+                                            <td className="py-2 px-4">{booking.studentId?.className || booking.studentId?.class || 'N/A'}</td>
+                                            <td className="py-2 px-4">
+                                                {new Date(booking.date).toLocaleDateString()} {booking.timeSlot}
+                                            </td>
+                                            <td className="py-2 px-4">
+                                                <button
+                                                    onClick={() => setSelectedBookingForProgress(booking)}
+                                                    className="btn btn-sm btn-outline-primary"
+                                                >
+                                                    Add Progress
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <p className="text-gray-500 italic">No active classes found.</p>
+                    )}
                 </div>
 
                 {/* Content Grid */}
@@ -194,6 +239,18 @@ const TeacherDashboard = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Progress Report Modal */}
+            {selectedBookingForProgress && (
+                <ProgressReportForm
+                    booking={selectedBookingForProgress}
+                    onClose={() => setSelectedBookingForProgress(null)}
+                    onSuccess={() => {
+                        // Optionally refresh data or show toast
+                        alert('Progress report added successfully!');
+                    }}
+                />
+            )}
         </div>
     );
 };

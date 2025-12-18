@@ -1,8 +1,9 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { bookingsAPI } from '../services/api';
-import { BookOpen, Search, MessageCircle, LogOut, Calendar, TrendingUp, Clock } from 'lucide-react';
+import { BookOpen, Search, Calendar, Clock, MapPin, User, ChevronRight, MessageCircle, LogOut, TrendingUp, Settings } from 'lucide-react';
 import { formatDate, formatCurrency } from '../utils/helpers';
 
 import DemoCompletionModal from '../components/DemoCompletionModal';
@@ -182,7 +183,7 @@ const StudentDashboard = () => {
                                             <div className={`badge ${booking.bookingStatus === 'confirmed' ? 'badge-success' :
                                                 booking.bookingStatus === 'completed' ? 'badge-primary' :
                                                     'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
-                                                }`}>
+                                                } `}>
                                                 {booking.bookingStatus}
                                             </div>
                                             <p className="text-sm font-semibold text-gray-900 dark:text-white">
@@ -240,6 +241,24 @@ const StudentDashboard = () => {
                                         <MessageCircle className="w-5 h-5 text-secondary-600 dark:text-gray-300" />
                                     </div>
                                     <span className="text-sm font-semibold text-gray-900 dark:text-white">Messages</span>
+                                </Link>
+                                <Link to="/payments/history" className="flex flex-col items-center justify-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors border border-green-100 dark:border-green-800 text-center group col-span-2">
+                                    <div className="w-10 h-10 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                        <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-300" />
+                                    </div>
+                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Payment History</span>
+                                </Link>
+                                <Link to="/progress" className="flex flex-col items-center justify-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/40 transition-colors border border-purple-100 dark:border-purple-800 text-center group col-span-2">
+                                    <div className="w-10 h-10 bg-purple-100 dark:bg-purple-800 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                        <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-300" />
+                                    </div>
+                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Academic Progress</span>
+                                </Link>
+                                <Link to="/settings" className="flex flex-col items-center justify-center p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-700 text-center group">
+                                    <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                        <Settings className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                                    </div>
+                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Settings</span>
                                 </Link>
                             </div>
                         </div>

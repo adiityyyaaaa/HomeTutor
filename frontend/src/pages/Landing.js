@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { BookOpen, MapPin, Star, Users, Clock, Shield, Video, TrendingUp } from 'lucide-react';
 
 const Landing = () => {
+    const { user } = useAuth();
     return (
         <div className="min-h-screen">
             {/* Navbar */}
@@ -14,12 +16,20 @@ const Landing = () => {
                             <span className="text-2xl font-bold text-gray-900 dark:text-white">HomeTutor</span>
                         </div>
                         <div className="flex items-center space-x-4">
-                            <Link to="/login" className="btn btn-secondary">
-                                Login
-                            </Link>
-                            <Link to="/register/student" className="btn btn-primary">
-                                Get Started
-                            </Link>
+                            {user ? (
+                                <Link to={user.role === 'teacher' ? '/teacher-dashboard' : '/dashboard'} className="btn btn-primary">
+                                    Go to Dashboard
+                                </Link>
+                            ) : (
+                                <>
+                                    <Link to="/login" className="btn btn-secondary">
+                                        Login
+                                    </Link>
+                                    <Link to="/register/student" className="btn btn-primary">
+                                        Get Started
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

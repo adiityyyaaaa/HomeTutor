@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, User, Mail, Lock, Phone, MapPin, AlertCircle, CheckCircle, Loader, X, Timer } from 'lucide-react';
 import { CLASSES, BOARDS } from '../utils/helpers';
-import { getCurrentLocation, isValidEmail, isValidPhone } from '../utils/helpers';
-import axios from 'axios';
+import { getCurrentLocation, isValidEmail } from '../utils/helpers';
+import PhoneVerification from '../components/PhoneVerification';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -17,15 +17,7 @@ const RegisterStudent = () => {
     const [gettingLocation, setGettingLocation] = useState(false);
     const [error, setError] = useState('');
 
-    // OTP State
-    const [otpState, setOtpState] = useState({
-        email: { sent: false, verified: false, loading: false },
-        phone: { sent: false, verified: false, loading: false }
-    });
-    const [showOtpModal, setShowOtpModal] = useState(false);
-    const [activeOtpType, setActiveOtpType] = useState(null); // 'email' or 'phone'
-    const [otpInput, setOtpInput] = useState('');
-    const [timer, setTimer] = useState(0);
+
 
     const [formData, setFormData] = useState({
         name: '',
@@ -94,63 +86,7 @@ const RegisterStudent = () => {
         setGettingLocation(false);
     };
 
-    // OTP Logic
-    const handleSendOTP = async (type) => {
-        const identifier = type === 'email' ? formData.email : formData.phone;
 
-        if (type === 'email' && !isValidEmail(identifier)) {
-            setError('Please enter a valid email first');
-            return;
-        }
-        if (type === 'phone' && !isValidPhone(identifier)) {
-            setError('Please enter a valid phone number first');
-            return;
-        }
-
-        setOtpState(prev => ({ ...prev, [type]: { ...prev[type], loading: true } }));
-        setError('');
-
-        try {
-            await axios.post(`${API_URL}/auth/send-otp`, { identifier, type });
-            setOtpState(prev => ({ ...prev, [type]: { ...prev[type], sent: true, loading: false } }));
-            setActiveOtpType(type);
-            setShowOtpModal(true);
-            setTimer(300); // 5 minutes
-        } catch (err) {
-            setError(err.response?.data?.message || 'Failed to send OTP');
-            setOtpState(prev => ({ ...prev, [type]: { ...prev[type], loading: false } }));
-        }
-    };
-
-    const handleVerifyOTP = async () => {
-        const identifier = activeOtpType === 'email' ? formData.email : formData.phone;
-        setLoading(true);
-        try {
-            await axios.post(`${API_URL}/auth/verify-otp`, {
-                identifier,
-                type: activeOtpType,
-                code: otpInput
-            });
-
-            // Success
-            setOtpState(prev => ({ ...prev, [activeOtpType]: { ...prev[activeOtpType], verified: true, sent: false } }));
-            setShowOtpModal(false);
-            setOtpInput('');
-        } catch (err) {
-            setError(err.response?.data?.message || 'Invalid OTP');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Timer Effect
-    useEffect(() => {
-        let interval;
-        if (showOtpModal && timer > 0) {
-            interval = setInterval(() => setTimer((t) => t - 1), 1000);
-        }
-        return () => clearInterval(interval);
-    }, [showOtpModal, timer]);
 
 
     const validateStep = () => {
@@ -165,10 +101,7 @@ const RegisterStudent = () => {
                 setError('Please enter a valid email address');
                 return false;
             }
-            if (!isValidPhone(formData.phone)) {
-                setError('Please enter a valid 10-digit phone number');
-                return false;
-            }
+
             if (formData.password.length < 6) {
                 setError('Password must be at least 6 characters');
                 return false;
@@ -178,9 +111,7 @@ const RegisterStudent = () => {
                 return false;
             }
 
-            // OTP Checks
-            if (!otpState.email.verified) { setError('Please verify your Email'); return false; }
-            if (!otpState.phone.verified) { setError('Please verify your Phone Number'); return false; }
+
         }
 
         if (step === 2) {
@@ -235,47 +166,7 @@ const RegisterStudent = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 dark:from-gray-900 dark:to-gray-800 py-12 px-4 flex items-center justify-center">
-            {/* OTP Modal */}
-            {showOtpModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-96 relative">
-                        <button onClick={() => setShowOtpModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                            <X className="w-5 h-5" />
-                        </button>
-                        <h3 className="text-xl font-bold mb-4">Verify {activeOtpType === 'email' ? 'Email' : 'Phone'}</h3>
-                        <p className="text-sm text-gray-500 mb-4">
-                            Enter the 6-digit code sent to {activeOtpType === 'email' ? formData.email : formData.phone}
-                        </p>
 
-                        <input
-                            type="text"
-                            maxLength="6"
-                            className="input text-center text-2xl tracking-widest mb-4"
-                            value={otpInput}
-                            onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, ''))}
-                            placeholder="000000"
-                            autoFocus
-                        />
-
-                        <div className="flex items-center justify-between mb-4 text-sm">
-                            <span className="flex items-center text-gray-500">
-                                <Timer className="w-4 h-4 mr-1" /> {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}
-                            </span>
-                            <button
-                                onClick={() => handleSendOTP(activeOtpType)}
-                                disabled={timer > 0}
-                                className={`font-medium ${timer > 0 ? 'text-gray-300' : 'text-primary hover:underline'}`}
-                            >
-                                Resend OTP
-                            </button>
-                        </div>
-
-                        <button onClick={handleVerifyOTP} disabled={otpInput.length !== 6 || loading} className="btn btn-primary w-full">
-                            {loading ? <Loader className="w-4 h-4 animate-spin mx-auto" /> : 'Verify Code'}
-                        </button>
-                    </div>
-                </div>
-            )}
 
             <div className="max-w-2xl w-full">
                 {/* Logo */}
@@ -355,22 +246,9 @@ const RegisterStudent = () => {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className={`input pl-10 ${otpState.email.verified ? 'border-green-500 pr-10' : ''}`}
+                                        className="input pl-10"
                                         placeholder="you@example.com"
-                                        disabled={otpState.email.verified}
                                     />
-                                    {otpState.email.verified ? (
-                                        <CheckCircle className="absolute right-3 top-3 text-green-500 w-5 h-5" />
-                                    ) : (
-                                        <button
-                                            type="button"
-                                            onClick={() => handleSendOTP('email')}
-                                            disabled={otpState.email.loading || !formData.email}
-                                            className="absolute right-2 top-2 btn btn-xs btn-outline"
-                                        >
-                                            {otpState.email.loading ? <Loader className="w-3 h-3 animate-spin" /> : 'Verify'}
-                                        </button>
-                                    )}
                                 </div>
                             </div>
 
@@ -385,23 +263,9 @@ const RegisterStudent = () => {
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className={`input pl-10 ${otpState.phone.verified ? 'border-green-500 pr-10' : ''}`}
-                                        placeholder="10-digit mobile number"
-                                        maxLength="10"
-                                        disabled={otpState.phone.verified}
+                                        className="input pl-10"
+                                        placeholder="Phone Number"
                                     />
-                                    {otpState.phone.verified ? (
-                                        <CheckCircle className="absolute right-3 top-3 text-green-500 w-5 h-5" />
-                                    ) : (
-                                        <button
-                                            type="button"
-                                            onClick={() => handleSendOTP('phone')}
-                                            disabled={otpState.phone.loading || !formData.phone}
-                                            className="absolute right-2 top-2 btn btn-xs btn-outline"
-                                        >
-                                            {otpState.phone.loading ? <Loader className="w-3 h-3 animate-spin" /> : 'Verify'}
-                                        </button>
-                                    )}
                                 </div>
                             </div>
 

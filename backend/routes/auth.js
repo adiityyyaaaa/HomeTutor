@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Teacher = require('../models/Teacher');
+const admin = require('../config/firebase'); // Import Firebase Admin
 const { uploadPhoto, uploadAadhaar } = require('../middleware/upload');
 const { validateEmail, validatePhone, validateAadhaar, validatePassword, validateCoordinates } = require('../utils/validation');
 
@@ -29,16 +30,41 @@ router.post('/register/student', uploadAadhaar.single('aadhaarDoc'), async (req,
             board,
             previousMarks,
             aadhaarNumber,
-            address
+
+            address,
+            firebaseToken // Get firebase token
         } = req.body;
 
-        // Validate required fields
-        if (!name || !email || !password || !phone || !aadhaarNumber || !address) {
+        // Validate required fields (added firebaseToken)
+        if (!name || !email || !password || !phone || !aadhaarNumber || !address || !firebaseToken) {
             return res.status(400).json({
                 success: false,
-                message: 'Please provide all required fields'
+                message: 'Please provide all required fields, including phone verification'
             });
         }
+
+        // Verify Firebase Token
+        let verifiedPhone;
+        try {
+            const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+            verifiedPhone = decodedToken.phone_number;
+        } catch (error) {
+            return res.status(401).json({ success: false, message: 'Invalid or expired phone verification token' });
+        }
+
+        // Ensure verified phone matches provided phone (normalize if needed, but strict check for now)
+        // Firebase returns E.164 (e.g., +919999999999). Ensure frontend sends consistent format.
+        if (verifiedPhone !== phone && verifiedPhone !== `+91${phone}` && `+${phone}` !== verifiedPhone) {
+            // Basic normalization check.
+            // If input is 9876543210 and firebase is +919876543210, we should allow.
+            if (!verifiedPhone.includes(phone)) {
+                return res.status(400).json({ success: false, message: 'Phone number does not match verified number' });
+            }
+        }
+
+        // Use verified phone to be safe
+        // const finalPhone = verifiedPhone; 
+
 
         // Validate email format
         if (!validateEmail(email)) {
@@ -171,7 +197,9 @@ router.post('/register/teacher', uploadAadhaar.fields([
             examSpecialist,
             examSpecialistRate,
             availability
+            // firebaseToken
         } = req.body;
+
 
         // Validate required fields
         if (!name || !email || !password || !phone || !aadhaarNumber || !address || !experience || !hourlyRate || !monthlyRate) {
@@ -180,6 +208,20 @@ router.post('/register/teacher', uploadAadhaar.fields([
                 message: 'Please provide all required fields'
             });
         }
+
+        // Verify Firebase Token (Temporarily Disabled)
+        // let verifiedPhone;
+        // try {
+        //     const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+        //     verifiedPhone = decodedToken.phone_number;
+        // } catch (error) {
+        //     return res.status(401).json({ success: false, message: 'Invalid or expired phone verification token' });
+        // }
+
+        // Basic normalization check.
+        // if (!verifiedPhone.includes(phone)) {
+        //     return res.status(400).json({ success: false, message: 'Phone number does not match verified number' });
+        // }
 
         // Validate email format
         if (!validateEmail(email)) {

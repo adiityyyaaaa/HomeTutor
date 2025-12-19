@@ -86,6 +86,31 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const registerTeacher = async (formData) => {
+        try {
+            const response = await api.post('/auth/register/teacher', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            if (response.data.success) {
+                const { token, teacher } = response.data;
+
+                // Store token and user
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(teacher));
+
+                setToken(token);
+                setUser(teacher);
+
+                return { success: true };
+            }
+
+            return { success: false, message: response.data.message };
+        } catch (error) {
+            throw error; // Re-throw so RegisterTeacher.js can handle it
+        }
+    };
+
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -104,6 +129,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         register,
+        registerTeacher,
         logout,
         updateUser,
         isAuthenticated: !!token,

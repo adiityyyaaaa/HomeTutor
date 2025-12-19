@@ -130,10 +130,7 @@ const RegisterTeacher = () => {
         }
 
         if (step === 4) {
-            if (!formData.photo) {
-                setError('Please upload a profile photo');
-                return false;
-            }
+            // Photo is optional - no validation needed
             if (formData.introVideoLink && !formData.introVideoLink.includes('youtube.com') && !formData.introVideoLink.includes('youtu.be')) {
                 setError('Please enter a valid YouTube link for Intro Video');
                 return false;
@@ -424,20 +421,16 @@ const RegisterTeacher = () => {
                                 <div className="grid grid-cols-1 gap-4">
                                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
                                         <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                                        <p className="text-sm text-gray-600 mb-2">Upload Profile Photo (10KB - 50KB)</p>
+                                        <p className="text-sm text-gray-600 mb-2">Upload Profile Photo (Optional, max 5MB)</p>
                                         <input
                                             type="file"
                                             name="photo"
+                                            accept="image/jpeg,image/jpg,image/png"
                                             onChange={(e) => {
                                                 const file = e.target.files[0];
                                                 if (file) {
-                                                    if (file.size < 10240 || file.size > 51200) {
-                                                        alert('Image must be between 10KB and 50KB');
-                                                        e.target.value = '';
-                                                        return;
-                                                    }
-                                                    if (!['image/jpeg', 'image/jpg'].includes(file.type)) {
-                                                        alert('Only JPG/JPEG allowed');
+                                                    if (file.size > 5 * 1024 * 1024) {
+                                                        alert('Image must be less than 5MB');
                                                         e.target.value = '';
                                                         return;
                                                     }

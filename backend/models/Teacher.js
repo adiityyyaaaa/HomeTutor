@@ -35,8 +35,7 @@ const teacherSchema = new mongoose.Schema({
     },
     aadhaarNumber: {
         type: String,
-        required: [true, 'Aadhaar number is required'],
-        unique: true,
+        default: '',
         trim: true
     },
     aadhaarVerified: {

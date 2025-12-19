@@ -205,8 +205,8 @@ router.post('/register/teacher', uploadAadhaar.fields([
 
 
         // Validate required fields
-        if (!name || !email || !password || !phone || !aadhaarNumber || !address || !experience || !hourlyRate || !monthlyRate) {
-            console.error('Validation Error: Missing Fields', { name, email, hasPassword: !!password, phone, aadhaarNumber, address, experience, hourlyRate, monthlyRate });
+        if (!name || !email || !password || !phone || !address || !experience || !hourlyRate || !monthlyRate) {
+            console.error('Validation Error: Missing Fields', { name, email, hasPassword: !!password, phone, address, experience, hourlyRate, monthlyRate });
             return res.status(400).json({
                 success: false,
                 message: 'Please provide all required fields'
@@ -243,14 +243,7 @@ router.post('/register/teacher', uploadAadhaar.fields([
             });
         }
 
-        // Validate Aadhaar format
-        if (!validateAadhaar(aadhaarNumber)) {
-            console.error('Validation Error: Invalid Aadhaar', aadhaarNumber);
-            return res.status(400).json({
-                success: false,
-                message: 'Please provide a valid 12-digit Aadhaar number'
-            });
-        }
+        // Aadhaar validation removed
 
         // Validate password
         if (!validatePassword(password)) {
@@ -291,14 +284,7 @@ router.post('/register/teacher', uploadAadhaar.fields([
             });
         }
 
-        // Check if Aadhaar is already registered
-        const existingAadhaar = await Teacher.findOne({ aadhaarNumber });
-        if (existingAadhaar) {
-            return res.status(400).json({
-                success: false,
-                message: 'This Aadhaar number is already registered'
-            });
-        }
+        // Aadhaar duplicate check removed
 
         // Get file paths
         let photoPath = '';
@@ -323,10 +309,8 @@ router.post('/register/teacher', uploadAadhaar.fields([
             email,
             password: hashedPassword,
             phone,
-            aadhaarNumber,
             address: parsedAddress,
-            photo: photoUrl,
-            aadhaarDoc: aadhaarDocUrl,
+            photo: photoPath,
             qualifications: parsedQualifications,
             subjects: parsedSubjects,
             boards: parsedBoards,
@@ -336,8 +320,8 @@ router.post('/register/teacher', uploadAadhaar.fields([
             monthlyRate,
             examSpecialist: examSpecialist === 'true' || examSpecialist === true,
             examSpecialistRate: examSpecialistRate || null,
-            introVideoLink,
-            teachingVideoLink,
+            videoIntro: introVideoLink || '',
+            teachingVideo: teachingVideoLink || '',
             availability: availability ? JSON.parse(availability) : []
         });
 

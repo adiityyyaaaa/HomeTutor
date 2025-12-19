@@ -6,7 +6,7 @@ import { isValidEmail } from '../utils/helpers';
 import PhoneVerification from '../components/PhoneVerification';
 import TagInput from '../components/TagInput';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
 const RegisterTeacher = () => {
     const { registerTeacher } = useAuth();

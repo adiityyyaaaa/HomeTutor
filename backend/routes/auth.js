@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Teacher = require('../models/Teacher');
-const admin = require('../config/firebase'); // Import Firebase Admin
+// const admin = require('../config/firebase'); // Import Firebase Admin
 const { uploadPhoto, uploadAadhaar } = require('../middleware/upload');
 const { validateEmail, validatePhone, validateAadhaar, validatePassword, validateCoordinates } = require('../utils/validation');
 

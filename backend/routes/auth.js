@@ -27,8 +27,12 @@ router.post('/register/student', uploadAadhaar.single('aadhaarDoc'), async (req,
             studentName,
             class: studentClass,
             board,
-            // Validate required fields
-            if (!name || !email || !password || !phone) {
+            previousMarks,
+            address
+        } = req.body;
+
+        // Validate required fields
+        if (!name || !email || !password || !phone) {
             return res.status(400).json({ message: 'Please provide all required fields' });
         }
 

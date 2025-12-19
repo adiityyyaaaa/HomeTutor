@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CallProvider } from './context/CallContext';
 import CallManager from './components/CallManager';
+import ThemeToggle from './components/ThemeToggle';
 
 // Pages (we'll create these)
 import Landing from './pages/Landing';
@@ -18,6 +19,7 @@ import WalletPage from './pages/WalletPage';
 import PaymentHistory from './pages/PaymentHistory';
 import StudentProgress from './pages/StudentProgress';
 import SettingsPage from './pages/SettingsPage';
+import EditProfile from './pages/EditProfile';
 import HelpPage from './pages/HelpPage';
 
 // Protected Route Component
@@ -154,6 +156,16 @@ function AppRoutes() {
         }
       />
 
+      {/* Edit Profile - Teacher */}
+      <Route
+        path="/edit-profile"
+        element={
+          <ProtectedRoute requiredRole="teacher">
+            <EditProfile />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Payment History - Both */}
       <Route
         path="/payments/history"
@@ -175,7 +187,8 @@ function App() {
     <AuthProvider>
       <CallProvider>
         <Router>
-          <div className="App">
+          <div className="App relative">
+            <ThemeToggle />
             <CallManager />
             <AppRoutes />
           </div>

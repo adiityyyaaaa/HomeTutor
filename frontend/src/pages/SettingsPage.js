@@ -16,29 +16,7 @@ const SettingsPage = () => {
         confirm: ''
     });
 
-    // Initialize dark mode from localStorage or system preference
-    useEffect(() => {
-        const isDark = localStorage.getItem('theme') === 'dark' ||
-            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        setDarkMode(isDark);
-        if (isDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }, []);
 
-    const toggleDarkMode = () => {
-        const newMode = !darkMode;
-        setDarkMode(newMode);
-        if (newMode) {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        }
-    };
 
     const handleNotificationChange = (e) => {
         setNotifications({
@@ -70,22 +48,7 @@ const SettingsPage = () => {
                     <div className="col-span-3 space-y-6">
 
                         {/* Appearance */}
-                        <div className="card">
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                                {darkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-                                Appearance
-                            </h2>
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="font-medium text-gray-900 dark:text-white">Dark Mode</p>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400">Reduce eye strain in low light</p>
-                                </div>
-                                <label className="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" className="sr-only peer" checked={darkMode} onChange={toggleDarkMode} />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                </label>
-                            </div>
-                        </div>
+
 
                         {/* Notifications */}
                         <div className="card">

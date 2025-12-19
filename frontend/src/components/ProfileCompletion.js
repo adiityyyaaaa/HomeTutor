@@ -15,7 +15,7 @@ const ProfileCompletion = ({ user }) => {
             description: 'Add a professional photo to build trust',
             weight: 10,
             isComplete: !!user.photo,
-            action: '/teacher-profile'
+            action: '/edit-profile'
         },
         {
             id: 'videoIntro',
@@ -23,7 +23,7 @@ const ProfileCompletion = ({ user }) => {
             description: 'Teachers with videos get 3x more bookings',
             weight: 20,
             isComplete: !!user.videoIntro,
-            action: '/teacher-profile'
+            action: '/edit-profile'
         },
         {
             id: 'teachingVideo',
@@ -31,7 +31,7 @@ const ProfileCompletion = ({ user }) => {
             description: 'Showcase your teaching style',
             weight: 15,
             isComplete: !!user.teachingVideo,
-            action: '/teacher-profile'
+            action: '/edit-profile'
         },
         {
             id: 'about',
@@ -39,7 +39,7 @@ const ProfileCompletion = ({ user }) => {
             description: 'Experience, subjects, and boards',
             weight: 15,
             isComplete: user.experience > 0 && user.subjects?.length > 0 && user.boards?.length > 0,
-            action: '/teacher-profile'
+            action: '/edit-profile'
         },
         {
             id: 'availability',
@@ -47,7 +47,7 @@ const ProfileCompletion = ({ user }) => {
             description: 'Set your teaching hours',
             weight: 20,
             isComplete: user.availability?.length > 0,
-            action: '/settings'
+            action: '/edit-profile'
         },
         {
             id: 'pricing',
@@ -55,7 +55,7 @@ const ProfileCompletion = ({ user }) => {
             description: 'Set your hourly and monthly rates',
             weight: 10,
             isComplete: user.hourlyRate > 0 && user.monthlyRate > 0,
-            action: '/teacher-profile'
+            action: '/edit-profile'
         },
         {
             id: 'aadhaar',
@@ -63,7 +63,7 @@ const ProfileCompletion = ({ user }) => {
             description: 'Verify your Aadhaar for "Verified" badge',
             weight: 10,
             isComplete: user.aadhaarVerified,
-            action: '/teacher-profile'
+            action: '/edit-profile'
         }
     ];
 

@@ -196,7 +196,9 @@ router.post('/register/teacher', uploadAadhaar.fields([
             monthlyRate,
             examSpecialist,
             examSpecialistRate,
-            availability
+            availability,
+            introVideoLink,
+            teachingVideoLink
             // firebaseToken
         } = req.body;
 
@@ -258,6 +260,12 @@ router.post('/register/teacher', uploadAadhaar.fields([
         // Parse address if it's a string
         const parsedAddress = typeof address === 'string' ? JSON.parse(address) : address;
 
+        // Parse array fields if they are strings (Multipart/form-data sends arrays as strings)
+        const parsedSubjects = typeof subjects === 'string' ? JSON.parse(subjects) : subjects;
+        const parsedBoards = typeof boards === 'string' ? JSON.parse(boards) : boards;
+        const parsedClasses = typeof classesCanTeach === 'string' ? JSON.parse(classesCanTeach) : classesCanTeach;
+        const parsedQualifications = typeof qualifications === 'string' ? JSON.parse(qualifications) : qualifications;
+
         // Validate coordinates
         if (!parsedAddress.coordinates || !validateCoordinates(parsedAddress.coordinates.coordinates)) {
             return res.status(400).json({
@@ -309,18 +317,20 @@ router.post('/register/teacher', uploadAadhaar.fields([
             phone,
             aadhaarNumber,
             address: parsedAddress,
-            photo: photoPath,
-            aadhaarPhoto: aadhaarPath,
-            qualifications: typeof qualifications === 'string' ? JSON.parse(qualifications) : qualifications,
-            subjects: typeof subjects === 'string' ? JSON.parse(subjects) : subjects,
-            boards: typeof boards === 'string' ? JSON.parse(boards) : boards,
-            classesCanTeach: typeof classesCanTeach === 'string' ? JSON.parse(classesCanTeach) : classesCanTeach,
+            photo: photoUrl,
+            aadhaarDoc: aadhaarDocUrl,
+            qualifications: parsedQualifications,
+            subjects: parsedSubjects,
+            boards: parsedBoards,
+            classesCanTeach: parsedClasses,
             experience,
             hourlyRate,
             monthlyRate,
             examSpecialist: examSpecialist === 'true' || examSpecialist === true,
             examSpecialistRate: examSpecialistRate || null,
-            availability: availability ? (typeof availability === 'string' ? JSON.parse(availability) : availability) : []
+            introVideoLink,
+            teachingVideoLink,
+            availability: availability ? JSON.parse(availability) : []
         });
 
         // Generate token

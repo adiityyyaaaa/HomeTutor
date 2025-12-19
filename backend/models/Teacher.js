@@ -74,18 +74,19 @@ const teacherSchema = new mongoose.Schema({
             required: true
         }
     }],
-    subjects: [{
-        type: String,
+    subjects: {
+        type: [String],
         required: true
-    }],
-    boards: [{
-        type: String,
-        enum: ['CBSE', 'ICSE', 'State Board', 'Other']
-    }],
-    classesCanTeach: [{
-        type: String,
+    },
+    boards: {
+        type: [String],
+        required: true
+    },
+    classesCanTeach: {
+        type: [String],
+        required: true,
         enum: ['LKG', 'UKG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-    }],
+    },
     experience: {
         type: Number, // in years
         required: [true, 'Experience is required'],

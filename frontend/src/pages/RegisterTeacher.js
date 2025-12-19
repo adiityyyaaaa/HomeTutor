@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { BookOpen, MapPin, Upload, ArrowRight, ArrowLeft, CheckCircle, Loader, X, Timer } from 'lucide-react';
 import { isValidEmail } from '../utils/helpers';
 import PhoneVerification from '../components/PhoneVerification';
+import TagInput from '../components/TagInput';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -31,16 +32,18 @@ const RegisterTeacher = () => {
                 coordinates: [] // [longitude, latitude]
             }
         },
-        subjects: '',
-        boards: '',
-        classesCanTeach: '',
+        subjects: [],
+        boards: [],
+        classesCanTeach: [],
         experience: '',
         qualifications: '',
         hourlyRate: '',
         monthlyRate: '',
         aadhaarNumber: '',
         photo: null,
-        aadhaarDoc: null
+        aadhaarDoc: null,
+        introVideoLink: '',
+        teachingVideoLink: ''
     });
 
     const handleChange = (e) => {
@@ -98,7 +101,6 @@ const RegisterTeacher = () => {
                 setError('Please enter a valid email address');
                 return false;
             }
-
             if (formData.password.length < 6) {
                 setError('Password must be at least 6 characters');
                 return false;
@@ -107,8 +109,6 @@ const RegisterTeacher = () => {
                 setError('Passwords do not match');
                 return false;
             }
-
-
         }
 
         if (step === 2) {
@@ -116,7 +116,7 @@ const RegisterTeacher = () => {
                 setError('Please fill in all location fields');
                 return false;
             }
-            if (!formData.subjects || !formData.boards || !formData.classesCanTeach || !formData.experience || !formData.qualifications) {
+            if (formData.subjects.length === 0 || formData.boards.length === 0 || formData.classesCanTeach.length === 0 || !formData.experience || !formData.qualifications) {
                 setError('Please fill in all professional details');
                 return false;
             }
@@ -125,6 +125,17 @@ const RegisterTeacher = () => {
         if (step === 3) {
             if (!formData.hourlyRate || !formData.monthlyRate) {
                 setError('Please specify your rates');
+                return false;
+            }
+        }
+
+        if (step === 4) {
+            if (!formData.photo) {
+                setError('Please upload a profile photo');
+                return false;
+            }
+            if (formData.introVideoLink && !formData.introVideoLink.includes('youtube.com') && !formData.introVideoLink.includes('youtu.be')) {
+                setError('Please enter a valid YouTube link for Intro Video');
                 return false;
             }
         }
@@ -149,10 +160,10 @@ const RegisterTeacher = () => {
             data.append('address', JSON.stringify(formData.address));
 
 
-            // Arrays (split by comma)
-            data.append('subjects', JSON.stringify(formData.subjects.split(',').map(s => s.trim())));
-            data.append('boards', JSON.stringify(formData.boards.split(',').map(s => s.trim())));
-            data.append('classesCanTeach', JSON.stringify(formData.classesCanTeach.split(',').map(s => s.trim())));
+            // Arrays (stringify for backend parsing)
+            data.append('subjects', JSON.stringify(formData.subjects));
+            data.append('boards', JSON.stringify(formData.boards));
+            data.append('classesCanTeach', JSON.stringify(formData.classesCanTeach));
 
             // Currently fixed placeholders
             data.append('qualifications', JSON.stringify([{ degree: formData.qualifications, institution: 'Unknown', year: 2020 }]));
@@ -160,6 +171,8 @@ const RegisterTeacher = () => {
             data.append('experience', formData.experience);
             data.append('hourlyRate', formData.hourlyRate);
             data.append('monthlyRate', formData.monthlyRate);
+            data.append('introVideoLink', formData.introVideoLink);
+            data.append('teachingVideoLink', formData.teachingVideoLink);
 
             if (formData.photo) data.append('photo', formData.photo);
 
@@ -197,13 +210,13 @@ const RegisterTeacher = () => {
                 <div className="card">
                     {/* Progress Steps */}
                     <div className="flex justify-between mb-8">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className={`flex items-center ${i < 3 ? 'flex-1' : ''}`}>
+                        {[1, 2, 3, 4].map((i) => (
+                            <div key={i} className={`flex items-center ${i < 4 ? 'flex-1' : ''}`}>
                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step >= i ? 'bg-primary text-white' : 'bg-gray-200 text-gray-500'
                                     }`}>
                                     {i}
                                 </div>
-                                {i < 3 && (
+                                {i < 4 && (
                                     <div className={`h-1 flex-1 mx-2 ${step > i ? 'bg-primary' : 'bg-gray-200'
                                         }`}></div>
                                 )}
@@ -299,36 +312,31 @@ const RegisterTeacher = () => {
                                     <button type="button" onClick={getLocation} className="btn btn-sm btn-outline flex items-center w-full justify-center">
                                         <MapPin className="w-4 h-4 mr-2" /> Detect My Location
                                     </button>
+                                    <button type="button" onClick={getLocation} className="btn btn-sm btn-outline flex items-center w-full justify-center">
+                                        <MapPin className="w-4 h-4 mr-2" /> Detect My Location
+                                    </button>
                                     {formData.address.coordinates.coordinates.length > 0 && <p className="text-xs text-green-600 mt-1 text-center">Location Captured!</p>}
                                 </div>
 
-                                <input
-                                    type="text"
-                                    name="subjects"
-                                    placeholder="Subjects (e.g. Math, Physics)"
-                                    className="input"
-                                    value={formData.subjects}
-                                    onChange={handleChange}
-                                    required
+                                <TagInput
+                                    label="Subjects (e.g. Math, Physics)"
+                                    placeholder="Type and press Enter"
+                                    tags={formData.subjects}
+                                    setTags={(newTags) => setFormData({ ...formData, subjects: newTags })}
                                 />
-                                <input
-                                    type="text"
-                                    name="boards"
-                                    placeholder="Boards (e.g. CBSE, ICSE)"
-                                    className="input"
-                                    value={formData.boards}
-                                    onChange={handleChange}
-                                    required
+                                <TagInput
+                                    label="Boards (e.g. CBSE, ICSE)"
+                                    placeholder="Type and press Enter"
+                                    tags={formData.boards}
+                                    setTags={(newTags) => setFormData({ ...formData, boards: newTags })}
                                 />
-                                <input
-                                    type="text"
-                                    name="classesCanTeach"
-                                    placeholder="Classes (e.g. 9, 10, 11, 12)"
-                                    className="input"
-                                    value={formData.classesCanTeach}
-                                    onChange={handleChange}
-                                    required
+                                <TagInput
+                                    label="Classes (e.g. 9, 10, 11)"
+                                    placeholder="Type and press Enter"
+                                    tags={formData.classesCanTeach}
+                                    setTags={(newTags) => setFormData({ ...formData, classesCanTeach: newTags })}
                                 />
+
                                 <div className="grid grid-cols-2 gap-4">
                                     <input
                                         type="number"
@@ -398,14 +406,65 @@ const RegisterTeacher = () => {
                                     value={formData.aadhaarNumber}
                                     onChange={handleChange}
                                 />
+                                <div className="flex justify-between pt-4">
+                                    <button type="button" onClick={prevStep} className="btn btn-secondary flex items-center">
+                                        <ArrowLeft className="w-4 h-4 mr-2" /> Back
+                                    </button>
+                                    <button type="button" onClick={nextStep} className="btn btn-primary flex items-center">
+                                        Next <ArrowRight className="w-4 h-4 ml-2" />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {step === 4 && (
+                            <div className="space-y-4">
+                                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Media & Profile</h2>
 
                                 <div className="grid grid-cols-1 gap-4">
                                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
                                         <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                                        <p className="text-sm text-gray-600 mb-2">Upload Profile Photo</p>
-                                        <input type="file" name="photo" onChange={handleFileChange} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary hover:file:bg-primary-100" />
+                                        <p className="text-sm text-gray-600 mb-2">Upload Profile Photo (10KB - 50KB)</p>
+                                        <input
+                                            type="file"
+                                            name="photo"
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                if (file) {
+                                                    if (file.size < 10240 || file.size > 51200) {
+                                                        alert('Image must be between 10KB and 50KB');
+                                                        e.target.value = '';
+                                                        return;
+                                                    }
+                                                    if (!['image/jpeg', 'image/jpg'].includes(file.type)) {
+                                                        alert('Only JPG/JPEG allowed');
+                                                        e.target.value = '';
+                                                        return;
+                                                    }
+                                                    setFormData({ ...formData, photo: file });
+                                                }
+                                            }}
+                                            className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary hover:file:bg-primary-100"
+                                        />
                                     </div>
                                 </div>
+
+                                <input
+                                    type="url"
+                                    name="introVideoLink"
+                                    placeholder="Intro Video Link (YouTube)"
+                                    className="input"
+                                    value={formData.introVideoLink}
+                                    onChange={handleChange}
+                                />
+                                <input
+                                    type="url"
+                                    name="teachingVideoLink"
+                                    placeholder="Teaching Demo Video Link (YouTube)"
+                                    className="input"
+                                    value={formData.teachingVideoLink}
+                                    onChange={handleChange}
+                                />
 
                                 <div className="flex justify-between pt-4">
                                     <button type="button" onClick={prevStep} className="btn btn-secondary flex items-center">

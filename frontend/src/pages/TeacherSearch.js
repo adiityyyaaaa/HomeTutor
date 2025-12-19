@@ -37,10 +37,13 @@ const TeacherSearch = () => {
             // Construct query params
             const params = {
                 ...filters,
-                search: keyword
+                search: keyword,
+                latitude: filters.lat,
+                longitude: filters.lng,
+                maxDistance: filters.radius
             };
             // Remove empty keys
-            Object.keys(params).forEach(key => (params[key] === '' || params[key] === null) && delete params[key]);
+            Object.keys(params).forEach(key => (params[key] === '' || params[key] === null || params[key] === undefined) && delete params[key]);
 
             const response = await teachersAPI.search(params);
             if (response.data.success && Array.isArray(response.data.teachers)) {
@@ -157,6 +160,25 @@ const TeacherSearch = () => {
                                 </button>
                                 {locationStatus === 'error' && (
                                     <p className="text-red-500 text-xs mt-2">Location access denied or failed.</p>
+                                )}
+
+                                {locationStatus === 'detected' && (
+                                    <div className="mt-4">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Search Radius
+                                            </label>
+                                            <span className="text-sm text-primary font-bold">{filters.radius} km</span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            min="1"
+                                            max="50"
+                                            value={filters.radius}
+                                            onChange={(e) => setFilters(prev => ({ ...prev, radius: parseInt(e.target.value) }))}
+                                            className="w-full"
+                                        />
+                                    </div>
                                 )}
                             </div>
 

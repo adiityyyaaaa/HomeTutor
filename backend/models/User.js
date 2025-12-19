@@ -44,11 +44,11 @@ const userSchema = new mongoose.Schema({
   },
   aadhaarNumber: {
     type: String,
-    required: [true, 'Aadhaar number is required'],
+    required: false, // Changed from true to false for simplified registration
     unique: true,
-    trim: true
+    sparse: true // Allow multiple null values
   },
-  aadhaarVerified: {
+  isAadhaarVerified: {
     type: Boolean,
     default: false
   },

@@ -30,14 +30,14 @@ const teacherSchema = new mongoose.Schema({
         default: ''
     },
     aadhaarPhoto: {
-        type: String, // URL or file path
-        default: ''
+        type: String, // URL to stored image
+        required: false // Simplified
     },
     aadhaarNumber: {
         type: String,
-        required: [true, 'Aadhaar number is required'],
+        required: false, // Simplified
         unique: true,
-        trim: true
+        sparse: true
     },
     aadhaarVerified: {
         type: Boolean,

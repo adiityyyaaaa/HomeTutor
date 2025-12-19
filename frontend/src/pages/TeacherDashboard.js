@@ -239,9 +239,9 @@ const TeacherDashboard = () => {
                 <div className="card mt-8">
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Quick Actions</h2>
                     <div className="grid md:grid-cols-3 gap-4">
-                        <button className="btn btn-primary">Update Profile</button>
-                        <button className="btn btn-secondary">Manage Availability</button>
-                        <Link to="/chat" className="btn btn-secondary">
+                        <Link to="/edit-profile" className="btn btn-primary text-center">Update Profile</Link>
+                        <Link to="/settings" className="btn btn-secondary text-center">Manage Availability</Link>
+                        <Link to="/chat" className="btn btn-secondary text-center">
                             View Messages
                         </Link>
                     </div>

@@ -6,7 +6,7 @@ import { User, Save, MapPin, Phone, Book } from 'lucide-react';
 import { CLASSES, BOARDS } from '../utils/helpers';
 
 const EditStudentProfile = () => {
-    const { user, login } = useAuth();
+    const { user, updateUser } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState({ type: '', text: '' });
@@ -70,8 +70,12 @@ const EditStudentProfile = () => {
             const res = await usersAPI.updateProfile(formData);
             if (res.data.success) {
                 setMsg({ type: 'success', text: 'Profile updated successfully!' });
-                // We should technically update the auth context here if we had a method exposed to partial update
-                // For now, reload works or assume subsequent fetches will get new data
+
+                if (res.data.user) {
+                    updateUser(res.data.user);
+                } else if (res.data.data) {
+                    updateUser(res.data.data);
+                }
             }
         } catch (error) {
             console.error(error);

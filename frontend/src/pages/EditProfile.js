@@ -6,7 +6,7 @@ import { BookOpen, DollarSign, Clock, User, Save, Image, Video } from 'lucide-re
 import { BOARDS, SUBJECTS } from '../utils/helpers';
 
 const EditProfile = () => {
-    const { user, login } = useAuth(); // login used to update user in context
+    const { user, updateUser } = useAuth(); // updateUser used to update user in context
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState({ type: '', text: '' });
@@ -84,8 +84,12 @@ const EditProfile = () => {
             const res = await teachersAPI.updateProfile(formData);
             if (res.data.success) {
                 setMsg({ type: 'success', text: 'Profile updated successfully!' });
-                // Optionally refresh user context
-                // login(res.data.data, res.data.token); // If api returns updated user
+                // Update user context with new data
+                if (res.data.teacher) {
+                    updateUser(res.data.teacher);
+                } else if (res.data.data) {
+                    updateUser(res.data.data);
+                }
             }
         } catch (error) {
             console.error(error);

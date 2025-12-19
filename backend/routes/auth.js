@@ -180,6 +180,7 @@ router.post('/register/teacher', uploadAadhaar.fields([
     { name: 'aadhaarDoc', maxCount: 1 }
 ]), async (req, res) => {
     try {
+        console.log('Registering Teacher - Body:', req.body);
         const {
             name,
             email,
@@ -205,6 +206,7 @@ router.post('/register/teacher', uploadAadhaar.fields([
 
         // Validate required fields
         if (!name || !email || !password || !phone || !aadhaarNumber || !address || !experience || !hourlyRate || !monthlyRate) {
+            console.error('Validation Error: Missing Fields', { name, email, hasPassword: !!password, phone, aadhaarNumber, address, experience, hourlyRate, monthlyRate });
             return res.status(400).json({
                 success: false,
                 message: 'Please provide all required fields'
@@ -243,6 +245,7 @@ router.post('/register/teacher', uploadAadhaar.fields([
 
         // Validate Aadhaar format
         if (!validateAadhaar(aadhaarNumber)) {
+            console.error('Validation Error: Invalid Aadhaar', aadhaarNumber);
             return res.status(400).json({
                 success: false,
                 message: 'Please provide a valid 12-digit Aadhaar number'
@@ -267,11 +270,16 @@ router.post('/register/teacher', uploadAadhaar.fields([
         const parsedQualifications = typeof qualifications === 'string' ? JSON.parse(qualifications) : qualifications;
 
         // Validate coordinates
-        if (!parsedAddress.coordinates || !validateCoordinates(parsedAddress.coordinates.coordinates)) {
-            return res.status(400).json({
-                success: false,
-                message: 'Please provide valid GPS coordinates'
-            });
+        // Default to [0,0] if missing to prevent validation error
+        if (parsedAddress.coordinates && parsedAddress.coordinates.coordinates && parsedAddress.coordinates.coordinates.length === 2) {
+            if (!validateCoordinates(parsedAddress.coordinates.coordinates)) {
+                return res.status(400).json({ success: false, message: 'Invalid coordinates' });
+            }
+        } else {
+            // Ensure structure matches Schema
+            if (!parsedAddress.coordinates) parsedAddress.coordinates = {};
+            parsedAddress.coordinates.type = 'Point';
+            parsedAddress.coordinates.coordinates = [0, 0];
         }
 
         // Check if teacher already exists

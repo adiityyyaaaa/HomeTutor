@@ -63,7 +63,7 @@ const ConversationList = ({ conversations, selectedUser, onSelectUser, onlineUse
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex justify-between items-start mb-1">
-                                        <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+                                        <h3 className="font-semibold text-gray-900 dark:text-white break-words">
                                             {conv.user.name}
                                         </h3>
                                         {// Show time if today, date if older

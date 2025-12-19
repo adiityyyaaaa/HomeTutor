@@ -100,7 +100,9 @@ const ChatWindow = ({
                     <MessageBubble
                         key={msg._id || msg.tempId}
                         message={msg}
-                        isOwn={msg.senderId._id === user._id || msg.senderId === user._id}
+                        isOwn={
+                            (msg.senderId._id ? msg.senderId._id.toString() : msg.senderId.toString()) === (user._id ? user._id.toString() : user.id)
+                        }
                     />
                 ))}
 

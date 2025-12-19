@@ -42,6 +42,7 @@ mongoose.connect(process.env.MONGODB_URI)
     .catch(err => console.error('MongoDB error:', err.message));
 
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', require('./routes/otp'));
 app.use('/api/teachers', require('./routes/teachers'));
 app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/progress', require('./routes/progress'));

@@ -63,7 +63,11 @@ const ChatPage = () => {
             });
 
             return () => {
-                socketService.disconnect();
+                // Do not disconnect, as CallContext manages the global connection
+                // socketService.disconnect();
+
+                // Ideally, we should remove specific listeners here to prevent duplicates
+                // socketService.removeListener('receive-message');
             };
         }
     }, [user, selectedUser]); // eslint-disable-line react-hooks/exhaustive-deps

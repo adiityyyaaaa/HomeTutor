@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { teachersAPI } from '../services/api';
 import { getCurrentLocation } from '../utils/helpers';
 import TeacherCard from '../components/TeacherCard';
-import { Filter, MapPin, Search as SearchIcon } from 'lucide-react';
+import { Filter, MapPin, Search as SearchIcon, ArrowLeft } from 'lucide-react';
 
 const TeacherSearch = () => {
     const [teachers, setTeachers] = useState([]);
@@ -97,6 +98,11 @@ const TeacherSearch = () => {
             <div className="container-custom">
                 {/* Search Header */}
                 <div className="mb-8">
+                    <div className="mb-4">
+                        <Link to="/student-dashboard" className="text-primary hover:underline flex items-center gap-1">
+                            <ArrowLeft className="w-4 h-4" /> Back to Dashboard
+                        </Link>
+                    </div>
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                         Find the Perfect Home Tutor
                     </h1>

@@ -12,19 +12,19 @@ export const CallProvider = ({ children }) => {
     const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
     const peerRef = useRef(null);
-    const socket = socketService.socket;
-
     // Call Status: idle, calling, incoming, connected, ending
     const [callStatus, setCallStatus] = useState('idle');
 
     useEffect(() => {
-        if (!user || !socket) return;
+        if (!user) return;
 
+        // Ensure socket is connected
+        const socket = socketService.connect(user._id);
+
+        // Register Listeners
         socketService.onIncomingCall((data) => {
-            // data: { from, name, offer, signal }
             if (callStatus !== 'idle') {
                 // Busy
-                // Ideally emit "busy"
                 return;
             }
             setCall({
@@ -37,7 +37,6 @@ export const CallProvider = ({ children }) => {
         });
 
         socketService.onCallAccepted((data) => {
-            // data: { signal, answer }
             if (callStatus === 'calling') {
                 setCallStatus('connected');
                 if (peerRef.current) {
@@ -62,12 +61,9 @@ export const CallProvider = ({ children }) => {
         });
 
         return () => {
-            // Cleanup listeners handled in CallManager or via socketService methods if needed,
-            // but socketService methods add listeners, they don't replace.
-            // Ideally we should remove listeners on unmount.
-            // keeping it simple for now.
+            socketService.disconnect();
         };
-    }, [user, socket, callStatus]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [user, callStatus]);
 
     const startCall = async (otherUser) => {
         setCallStatus('calling');

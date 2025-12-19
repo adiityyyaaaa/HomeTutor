@@ -63,7 +63,13 @@ router.post('/', protect, async (req, res) => {
             teacherId,
             scheduledDate: new Date(scheduledDate),
             scheduledTime,
-            bookingStatus: { $in: ['pending', 'confirmed'] }
+            $or: [
+                { bookingStatus: 'confirmed' },
+                {
+                    bookingStatus: 'pending',
+                    createdAt: { $gt: new Date(Date.now() - 15 * 60 * 1000) } // Only block if pending for < 15 mins
+                }
+            ]
         });
 
         if (conflictingBooking) {

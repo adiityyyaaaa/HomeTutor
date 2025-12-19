@@ -154,16 +154,16 @@ router.post('/verify-payment', protect, async (req, res) => {
             console.log('Skipping signature verification for Mock Order');
         } else {
             // In production, uncomment signature verification
-            /*
+
             const crypto = require('crypto');
             const generatedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-              .update(booking.razorpayOrderId + '|' + razorpayPaymentId)
-              .digest('hex');
-   
+                .update(booking.razorpayOrderId + '|' + razorpayPaymentId)
+                .digest('hex');
+
             if (generatedSignature !== razorpaySignature) {
-              return res.status(400).json({ success: false, message: 'Payment verification failed' });
+                return res.status(400).json({ success: false, message: 'Payment verification failed' });
             }
-            */
+
         }
 
         // Update booking with payment details

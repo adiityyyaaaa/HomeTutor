@@ -116,6 +116,17 @@ const RegisterStudent = () => {
         }
 
         if (step === 3) {
+            if (!formData.aadhaarNumber) {
+                setError('Please enter Aadhaar number');
+                return false;
+            }
+            if (!isValidAadhaar(formData.aadhaarNumber)) {
+                setError('Please enter a valid 12-digit Aadhaar number');
+                return false;
+            }
+        }
+
+        if (step === 4) {
             if (!formData.address.street || !formData.address.city || !formData.address.state || !formData.address.pincode) {
                 setError('Please fill in all address fields');
                 return false;
@@ -174,7 +185,7 @@ const RegisterStudent = () => {
                 {/* Progress Steps */}
                 <div className="mb-8">
                     <div className="flex items-center justify-between">
-                        {[1, 2, 3].map((s) => (
+                        {[1, 2, 3, 4].map((s) => (
                             <React.Fragment key={s}>
                                 <div className="flex flex-col items-center">
                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold
@@ -184,10 +195,11 @@ const RegisterStudent = () => {
                                     <div className={`mt-2 text-xs ${step >= s ? 'text-primary' : 'text-gray-500'}`}>
                                         {s === 1 && 'Account'}
                                         {s === 2 && 'Student Info'}
-                                        {s === 3 && 'Address'}
+                                        {s === 3 && 'Aadhaar'}
+                                        {s === 4 && 'Address'}
                                     </div>
                                 </div>
-                                {s < 3 && (
+                                {s < 4 && (
                                     <div className={`flex-1 h-1 mx-2 ${step > s ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-600'}`}></div>
                                 )}
                             </React.Fragment>
@@ -368,10 +380,39 @@ const RegisterStudent = () => {
                         </div>
                     )}
 
-                    {/* Step 3: Address (Formerly Step 4) */}
+                    {/* Step 3: Aadhaar */}
+                    {step === 3 && (
+                        <div className="space-y-6 animate-slideIn">
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Aadhaar Verification</h3>
+
+                            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                                <p className="text-sm text-blue-800 dark:text-blue-300">
+                                    Your Aadhaar details are kept secure and are used only for verification purposes.
+                                </p>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Aadhaar Number *
+                                </label>
+                                <div className="relative">
+                                    <CreditCard className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        name="aadhaarNumber"
+                                        value={formData.aadhaarNumber}
+                                        onChange={handleChange}
+                                        className="input pl-10"
+                                        placeholder="12-digit Aadhaar number"
+                                        maxLength="12"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Step 4: Address */}
-                    {step === 3 && (
+                    {step === 4 && (
                         <div className="space-y-6 animate-slideIn">
                             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Address Details</h3>
 
@@ -472,7 +513,7 @@ const RegisterStudent = () => {
                             </button>
                         )}
 
-                        {step < 3 ? (
+                        {step < 4 ? (
                             <button
                                 type="button"
                                 onClick={nextStep}

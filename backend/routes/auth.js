@@ -28,19 +28,39 @@ router.post('/register/student', uploadAadhaar.single('aadhaarDoc'), async (req,
             class: studentClass,
             board,
             previousMarks,
+            aadhaarNumber,
             address
         } = req.body;
 
         // Validate required fields
-        if (!name || !email || !password || !phone) {
-            return res.status(400).json({ message: 'Please provide all required fields' });
+        if (!name || !email || !password || !phone || !aadhaarNumber || !address) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide all required fields'
+            });
         }
 
-        // Validate phone
+        // Validate email format
+        if (!validateEmail(email)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide a valid email address'
+            });
+        }
+
+        // Validate phone format
         if (!validatePhone(phone)) {
             return res.status(400).json({
                 success: false,
                 message: 'Please provide a valid 10-digit phone number'
+            });
+        }
+
+        // Validate Aadhaar format
+        if (!validateAadhaar(aadhaarNumber)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide a valid 12-digit Aadhaar number'
             });
         }
 
@@ -72,6 +92,15 @@ router.post('/register/student', uploadAadhaar.single('aadhaarDoc'), async (req,
             });
         }
 
+        // Check if Aadhaar is already registered
+        const existingAadhaar = await User.findOne({ aadhaarNumber });
+        if (existingAadhaar) {
+            return res.status(400).json({
+                success: false,
+                message: 'This Aadhaar number is already registered'
+            });
+        }
+
         // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -86,6 +115,7 @@ router.post('/register/student', uploadAadhaar.single('aadhaarDoc'), async (req,
             class: studentClass,
             board,
             previousMarks,
+            aadhaarNumber,
             address: parsedAddress
         });
 
@@ -144,8 +174,11 @@ router.post('/register/teacher', uploadAadhaar.fields([
         } = req.body;
 
         // Validate required fields
-        if (!name || !email || !password || !phone || !subjects || !hourlyRate) {
-            return res.status(400).json({ message: 'Please provide all required fields' });
+        if (!name || !email || !password || !phone || !aadhaarNumber || !address || !experience || !hourlyRate || !monthlyRate) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide all required fields'
+            });
         }
 
         // Validate email format

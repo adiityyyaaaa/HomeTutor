@@ -324,11 +324,26 @@ const RegisterTeacher = () => {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                                <input
+                                    type="text"
+                                    name="aadhaarNumber"
+                                    placeholder="Aadhaar Number (12 digits)"
+                                    className="input-field"
+                                    value={formData.aadhaarNumber}
+                                    onChange={handleChange}
+                                    required
+                                />
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
                                         <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                                         <p className="text-sm text-gray-600 mb-2">Upload Profile Photo</p>
                                         <input type="file" name="photo" onChange={handleFileChange} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary hover:file:bg-primary-100" />
+                                    </div>
+                                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition-colors">
+                                        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                                        <p className="text-sm text-gray-600 mb-2">Upload Aadhaar Card</p>
+                                        <input type="file" name="aadhaarDoc" onChange={handleFileChange} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary hover:file:bg-primary-100" />
                                     </div>
                                 </div>
 

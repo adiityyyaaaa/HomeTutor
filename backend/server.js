@@ -51,6 +51,7 @@ app.use('/api/messages', require('./routes/messages'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/payments', require('./routes/payments'));
+app.use('/api/users', require('./routes/users'));
 
 app.get('/api/health', (req, res) => {
     res.json({

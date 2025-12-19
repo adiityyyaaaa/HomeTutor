@@ -81,7 +81,7 @@ const EditProfile = () => {
             // I will implement the UI and try to call `teachersAPI.updateProfile(user._id, formData)`
             // If it fails, I'll catch it.
 
-            const res = await teachersAPI.updateProfile(user._id, formData);
+            const res = await teachersAPI.updateProfile(formData);
             if (res.data.success) {
                 setMsg({ type: 'success', text: 'Profile updated successfully!' });
                 // Optionally refresh user context

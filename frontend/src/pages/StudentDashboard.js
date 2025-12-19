@@ -63,6 +63,9 @@ const StudentDashboard = () => {
                             <span className="text-2xl font-bold text-gray-900 dark:text-white">HomeTutor</span>
                         </div>
                         <div className="flex items-center space-x-4">
+                            <Link to="/edit-student-profile" className="btn btn-sm btn-outline flex items-center gap-2">
+                                <span className="hidden md:inline">Edit Profile</span>
+                            </Link>
                             <Link to="/search" className="btn btn-secondary flex items-center space-x-2">
                                 <Search className="w-5 h-5" />
                                 <span className="hidden md:inline">Find Tutors</span>
@@ -230,6 +233,12 @@ const StudentDashboard = () => {
                         <div className="card">
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
                             <div className="grid grid-cols-2 gap-4">
+                                <Link to="/edit-student-profile" className="flex flex-col items-center justify-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors border border-blue-100 dark:border-blue-800 text-center group col-span-2">
+                                    <div className="w-10 h-10 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                        <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-300" />
+                                    </div>
+                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">Edit Profile</span>
+                                </Link>
                                 <Link to="/search" className="flex flex-col items-center justify-center p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors border border-primary-100 dark:border-primary-800 text-center group">
                                     <div className="w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
                                         <Search className="w-5 h-5 text-primary" />

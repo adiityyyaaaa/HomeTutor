@@ -65,6 +65,12 @@ export const teachersAPI = {
     },
 };
 
+// Users (Students)
+export const usersAPI = {
+    updateProfile: (data) => api.put('/users/profile', data),
+    getProfile: () => api.get('/users/profile'),
+};
+
 // Bookings
 export const bookingsAPI = {
     create: (data) => api.post('/bookings', data),

@@ -20,6 +20,7 @@ import PaymentHistory from './pages/PaymentHistory';
 import StudentProgress from './pages/StudentProgress';
 import SettingsPage from './pages/SettingsPage';
 import EditProfile from './pages/EditProfile';
+import EditStudentProfile from './pages/EditStudentProfile';
 import HelpPage from './pages/HelpPage';
 
 // Protected Route Component
@@ -162,6 +163,16 @@ function AppRoutes() {
         element={
           <ProtectedRoute requiredRole="teacher">
             <EditProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Edit Profile - Student */}
+      <Route
+        path="/edit-student-profile"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <EditStudentProfile />
           </ProtectedRoute>
         }
       />

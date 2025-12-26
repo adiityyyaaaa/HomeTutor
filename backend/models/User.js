@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { SKILL_CATEGORIES, PREFERRED_TEACHING_MODE } = require('../utils/constants');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -25,32 +26,19 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Phone number is required'],
     trim: true
   },
-  studentName: {
+  learnerName: {
     type: String,
     trim: true
   },
-  class: {
+  interests: {
+    type: [String],
+    enum: SKILL_CATEGORIES,
+    default: []
+  },
+  preferredTeachingMode: {
     type: String,
-    enum: ['LKG', 'UKG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-  },
-  board: {
-    type: String,
-    enum: ['CBSE', 'ICSE', 'State Board', 'Other']
-  },
-  previousMarks: {
-    type: Number,
-    min: 0,
-    max: 100
-  },
-  aadhaarNumber: {
-    type: String,
-    required: [true, 'Aadhaar number is required'],
-    unique: true,
-    trim: true
-  },
-  aadhaarVerified: {
-    type: Boolean,
-    default: false
+    enum: PREFERRED_TEACHING_MODE,
+    default: 'no-preference'
   },
   address: {
     street: String,

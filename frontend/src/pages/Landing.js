@@ -13,7 +13,7 @@ const Landing = () => {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                             <BookOpen className="w-8 h-8 text-primary" />
-                            <span className="text-2xl font-bold text-gray-900 dark:text-white">HomeTutor</span>
+                            <span className="text-2xl font-bold text-gray-900 dark:text-white">TutorX</span>
                         </div>
                         <div className="flex items-center space-x-4">
                             {user ? (
@@ -41,28 +41,33 @@ const Landing = () => {
                     <div className="grid md:grid-cols-2 gap-12 items-center">
                         <div className="space-y-6 animate-slideIn">
                             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
-                                Find the Perfect{' '}
-                                <span className="text-primary">Home Tutor</span> Near You
+                                Learn Anything.{' '}
+                                <span className="text-primary">Teach Anything.</span>{' '}
+                                Grow Together.
                             </h1>
                             <p className="text-xl text-gray-600 dark:text-gray-300">
-                                Connect with verified, experienced tutors. Book free demo classes. Pay only when satisfied.
+                                Connect with expert instructors for any skill you want to learn. Or share your expertise and earn money teaching what you love. Online, offline, or hybrid - you choose.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <Link to="/register/student" className="btn btn-primary btn-lg">
-                                    Find a Tutor
+                                <Link to="/search" className="btn btn-primary btn-lg">
+                                    Find an Instructor
                                 </Link>
                                 <Link to="/register/teacher" className="btn btn-outline btn-lg">
-                                    Become a Tutor
+                                    Become an Instructor
                                 </Link>
                             </div>
                             <div className="flex items-center space-x-8 pt-4">
                                 <div>
                                     <div className="text-3xl font-bold text-primary">10,000+</div>
-                                    <div className="text-gray-600 dark:text-gray-400">Verified Tutors</div>
+                                    <div className="text-gray-600 dark:text-gray-400">Instructors</div>
                                 </div>
                                 <div>
                                     <div className="text-3xl font-bold text-primary">50,000+</div>
-                                    <div className="text-gray-600 dark:text-gray-400">Happy Students</div>
+                                    <div className="text-gray-600 dark:text-gray-400">Active Learners</div>
+                                </div>
+                                <div>
+                                    <div className="text-3xl font-bold text-primary">100+</div>
+                                    <div className="text-gray-600 dark:text-gray-400">Skills</div>
                                 </div>
                             </div>
                         </div>
@@ -111,43 +116,43 @@ const Landing = () => {
                 <div className="container-custom">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                            Why Choose HomeTutor?
+                            Why Choose TutorX?
                         </h2>
                         <p className="text-xl text-gray-600 dark:text-gray-400">
-                            The most trusted platform for home tuition
+                            The ultimate two-sided marketplace for learners and instructors
                         </p>
                     </div>
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
                             {
-                                icon: <MapPin className="w-12 h-12" />,
-                                title: 'Location-Based Search',
-                                description: 'Find tutors near you with GPS-based distance calculation. Filter by 5km, 10km, or 20km radius.'
+                                icon: <BookOpen className="w-12 h-12" />,
+                                title: 'Learn Any Skill',
+                                description: 'From music to coding, cooking to yoga - find expert instructors for any skill you want to master.'
                             },
                             {
                                 icon: <Video className="w-12 h-12" />,
-                                title: 'Free Demo Classes',
-                                description: 'Book a free demo class. Payment is held during demo and only released when you\'re satisfied.'
+                                title: 'Flexible Learning Modes',
+                                description: 'Choose online classes, in-person sessions, or hybrid learning based on your preference and schedule.'
                             },
                             {
                                 icon: <Star className="w-12 h-12" />,
-                                title: 'Verified Teachers',
-                                description: 'All tutors are Aadhaar verified with detailed qualifications, experience, and student reviews.'
+                                title: 'Verified Instructors',
+                                description: 'All instructors are verified with detailed profiles, portfolios, ratings, and genuine student reviews.'
                             },
                             {
                                 icon: <TrendingUp className="w-12 h-12" />,
-                                title: 'Progress Tracking',
-                                description: 'Track your child\'s progress with detailed reports, test scores, and performance analytics.'
+                                title: 'Earn Teaching',
+                                description: 'Share your expertise and earn money. Set your own rates, manage your schedule, and grow your income.'
                             },
                             {
                                 icon: <Users className="w-12 h-12" />,
-                                title: 'Real-Time Chat',
-                                description: 'Chat with tutors in real-time. Make audio calls to discuss schedules and requirements.'
+                                title: 'Free Demo Sessions',
+                                description: 'Try before you commit. Book free demo sessions to find the perfect instructor for your learning goals.'
                             },
                             {
-                                icon: <Clock className="w-12 h-12" />,
-                                title: 'Flexible Scheduling',
-                                description: 'Book classes at your convenience. Reschedule or cancel with our flexible booking system.'
+                                icon: <Shield className="w-12 h-12" />,
+                                title: 'Secure & Trusted',
+                                description: 'Safe payment processing, verified profiles, and trusted by thousands of learners and instructors.'
                             }
                         ].map((feature, index) => (
                             <div key={index} className="card-hover text-center">
@@ -174,25 +179,25 @@ const Landing = () => {
                             How It Works
                         </h2>
                         <p className="text-xl text-gray-600 dark:text-gray-400">
-                            Get started in 3 simple steps
+                            For learners and instructors - get started in 3 simple steps
                         </p>
                     </div>
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
                             {
                                 step: '1',
-                                title: 'Search & Filter',
-                                description: 'Enter your requirements - subject, class, board. Filter by location, price, rating, and experience.'
+                                title: 'Sign Up & Browse',
+                                description: 'Create your free account. Learners: browse 100+ skills. Instructors: list your expertise and set your rates.'
                             },
                             {
                                 step: '2',
-                                title: 'Book Demo Class',
-                                description: 'Choose a tutor and book a free demo class. Payment is held securely until you\'re satisfied.'
+                                title: 'Connect & Book',
+                                description: 'Find the perfect match. Book free demo sessions to try before committing. Choose online, offline, or hybrid.'
                             },
                             {
                                 step: '3',
-                                title: 'Start Learning',
-                                description: 'If satisfied with the demo, continue with regular classes. Track progress and communicate via chat.'
+                                title: 'Learn & Earn',
+                                description: 'Learners: master new skills with expert guidance. Instructors: teach what you love and earn money doing it.'
                             }
                         ].map((step, index) => (
                             <div key={index} className="relative">
@@ -221,17 +226,17 @@ const Landing = () => {
             <section className="py-20 bg-gradient-to-r from-primary to-primary-600">
                 <div className="container-custom text-center">
                     <h2 className="text-4xl font-bold text-white mb-4">
-                        Ready to Start Learning?
+                        Ready to Get Started?
                     </h2>
                     <p className="text-xl text-primary-100 mb-8">
-                        Join thousands of students finding success with verified home tutors
+                        Join 50,000+ learners mastering new skills and 10,000+ instructors earning money
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link to="/register/student" className="btn bg-white text-primary hover:bg-gray-100">
-                            Find a Tutor Now
+                        <Link to="/search" className="btn bg-white text-primary hover:bg-gray-100">
+                            Start Learning
                         </Link>
                         <Link to="/register/teacher" className="btn bg-primary-700 text-white hover:bg-primary-800">
-                            Apply as a Tutor
+                            Start Teaching
                         </Link>
                     </div>
                 </div>
@@ -244,24 +249,24 @@ const Landing = () => {
                         <div>
                             <div className="flex items-center space-x-2 mb-4">
                                 <BookOpen className="w-6 h-6 text-primary" />
-                                <span className="text-xl font-bold text-white">HomeTutor</span>
+                                <span className="text-xl font-bold text-white">TutorX</span>
                             </div>
                             <p className="text-sm">
-                                India's most trusted platform for finding verified home tutors.
+                                Your trusted marketplace for learning and teaching any skill.
                             </p>
                         </div>
                         <div>
-                            <h4 className="font-semibold text-white mb-4">For Students</h4>
+                            <h4 className="font-semibold text-white mb-4">For Learners</h4>
                             <ul className="space-y-2 text-sm">
-                                <li><Link to="/search" className="hover:text-primary">Find Tutors</Link></li>
-                                <li><Link to="/register/student" className="hover:text-primary">Register</Link></li>
+                                <li><Link to="/search" className="hover:text-primary">Browse Skills</Link></li>
+                                <li><Link to="/register/student" className="hover:text-primary">Sign Up</Link></li>
                             </ul>
                         </div>
                         <div>
-                            <h4 className="font-semibold text-white mb-4">For Teachers</h4>
+                            <h4 className="font-semibold text-white mb-4">For Instructors</h4>
                             <ul className="space-y-2 text-sm">
-                                <li><Link to="/register/teacher" className="hover:text-primary">Become a Tutor</Link></li>
-                                <li><Link to="/teacher-dashboard" className="hover:text-primary">Teacher Dashboard</Link></li>
+                                <li><Link to="/register/teacher" className="hover:text-primary">Start Teaching</Link></li>
+                                <li><Link to="/teacher-dashboard" className="hover:text-primary">Instructor Dashboard</Link></li>
                             </ul>
                         </div>
                         <div>
@@ -275,7 +280,7 @@ const Landing = () => {
                         </div>
                     </div>
                     <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
-                        <p>&copy; 2024 HomeTutor. All rights reserved.</p>
+                        <p>&copy; 2024 TutorX. All rights reserved.</p>
                     </div>
                 </div>
             </footer>

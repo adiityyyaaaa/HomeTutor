@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { SKILL_LEVELS, TEACHING_MODES, BOOKING_TYPES } = require('../utils/constants');
 
 const bookingSchema = new mongoose.Schema({
     studentId: {
@@ -11,19 +12,32 @@ const bookingSchema = new mongoose.Schema({
         ref: 'Teacher',
         required: true
     },
-    subject: {
+    skill: {
         type: String,
-        required: [true, 'Subject is required']
+        required: [true, 'Skill is required']
     },
-    class: {
+    skillLevel: {
         type: String,
-        required: [true, 'Class is required'],
-        enum: ['LKG', 'UKG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+        required: [true, 'Skill level is required'],
+        enum: SKILL_LEVELS
     },
     bookingType: {
         type: String,
         required: true,
-        enum: ['demo', 'monthly', 'exam-prep']
+        enum: BOOKING_TYPES
+    },
+    teachingMode: {
+        type: String,
+        required: [true, 'Teaching mode is required'],
+        enum: TEACHING_MODES
+    },
+    meetingLink: {
+        type: String,
+        default: null
+    },
+    meetingPlatform: {
+        type: String,
+        default: null
     },
     scheduledDate: {
         type: Date,
@@ -36,6 +50,14 @@ const bookingSchema = new mongoose.Schema({
     duration: {
         type: Number, // in minutes
         default: 60
+    },
+    sessionCount: {
+        type: Number,
+        default: 1
+    },
+    sessionsCompleted: {
+        type: Number,
+        default: 0
     },
     amount: {
         type: Number,
@@ -87,5 +109,6 @@ const bookingSchema = new mongoose.Schema({
 bookingSchema.index({ studentId: 1, bookingStatus: 1 });
 bookingSchema.index({ teacherId: 1, bookingStatus: 1 });
 bookingSchema.index({ scheduledDate: 1 });
+bookingSchema.index({ teachingMode: 1 });
 
 module.exports = mongoose.model('Booking', bookingSchema);

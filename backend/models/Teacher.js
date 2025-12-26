@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { SKILL_CATEGORIES, TEACHING_MODES, SKILL_LEVELS, ONLINE_TOOLS, LANGUAGES, SESSION_DURATIONS } = require('../utils/constants');
 
 const teacherSchema = new mongoose.Schema({
     name: {
@@ -29,19 +30,6 @@ const teacherSchema = new mongoose.Schema({
         type: String, // URL or file path
         default: ''
     },
-    aadhaarPhoto: {
-        type: String, // URL or file path
-        default: ''
-    },
-    aadhaarNumber: {
-        type: String,
-        default: '',
-        trim: true
-    },
-    aadhaarVerified: {
-        type: Boolean,
-        default: false
-    },
     address: {
         street: String,
         city: String,
@@ -59,8 +47,60 @@ const teacherSchema = new mongoose.Schema({
             }
         }
     },
+    // Skills and Categories (replacing academic subjects)
+    skills: {
+        type: [String],
+        required: [true, 'At least one skill is required'],
+        validate: {
+            validator: function (v) {
+                return v && v.length > 0;
+            },
+            message: 'Please add at least one skill you can teach'
+        }
+    },
+    skillCategories: {
+        type: [String],
+        required: [true, 'At least one skill category is required'],
+        enum: SKILL_CATEGORIES,
+        validate: {
+            validator: function (v) {
+                return v && v.length > 0;
+            },
+            message: 'Please select at least one skill category'
+        }
+    },
+    skillLevels: {
+        type: [String],
+        required: [true, 'Skill level is required'],
+        enum: SKILL_LEVELS,
+        default: ['All Levels']
+    },
+    // Teaching Modes
+    teachingModes: {
+        type: [String],
+        required: [true, 'At least one teaching mode is required'],
+        enum: TEACHING_MODES,
+        validate: {
+            validator: function (v) {
+                return v && v.length > 0;
+            },
+            message: 'Please select at least one teaching mode'
+        }
+    },
+    onlineTools: {
+        type: [String],
+        enum: ONLINE_TOOLS,
+        default: []
+    },
+    maxTravelDistance: {
+        type: Number, // in km
+        default: 10,
+        min: 0,
+        max: 50
+    },
+    // Qualifications (more flexible than before)
     qualifications: [{
-        degree: {
+        title: {
             type: String,
             required: true
         },
@@ -71,26 +111,26 @@ const teacherSchema = new mongoose.Schema({
         year: {
             type: Number,
             required: true
-        }
+        },
+        description: String
     }],
-    subjects: {
-        type: [String],
-        required: true
-    },
-    boards: {
-        type: [String],
-        required: true
-    },
-    classesCanTeach: {
-        type: [String],
-        required: true,
-        enum: ['LKG', 'UKG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-    },
+    portfolio: [{
+        title: String,
+        url: String,
+        description: String
+    }],
     experience: {
         type: Number, // in years
         required: [true, 'Experience is required'],
         min: 0
     },
+    languages: {
+        type: [String],
+        required: [true, 'At least one language is required'],
+        enum: LANGUAGES,
+        default: ['English']
+    },
+    // Videos
     videoIntro: {
         type: String, // URL or file path
         default: ''
@@ -99,26 +139,19 @@ const teacherSchema = new mongoose.Schema({
         type: String, // URL or file path for demo
         default: ''
     },
-    hourlyRate: {
+    // Pricing
+    ratePerSession: {
         type: Number,
-        required: [true, 'Hourly rate is required'],
+        required: [true, 'Rate per session is required'],
         min: 0
     },
-    monthlyRate: {
-        type: Number,
-        required: [true, 'Monthly rate is required'],
-        min: 0
+    sessionDuration: {
+        type: Number, // in minutes
+        required: true,
+        enum: SESSION_DURATIONS,
+        default: 60
     },
-    examSpecialist: {
-        type: Boolean,
-        default: false
-    },
-    examSpecialistRate: {
-        type: Number,
-        min: 10000,
-        max: 15000,
-        default: null
-    },
+    // Ratings and Stats
     rating: {
         type: Number,
         default: 0,
@@ -133,6 +166,7 @@ const teacherSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    // Availability
     availability: [{
         day: {
             type: String,
@@ -150,6 +184,7 @@ const teacherSchema = new mongoose.Schema({
             }
         }]
     }],
+    // Status and Premium
     isActive: {
         type: Boolean,
         default: true
@@ -180,8 +215,9 @@ const teacherSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Index for geospatial queries
+// Index for geospatial queries (only relevant for offline/hybrid teaching)
 teacherSchema.index({ 'address.coordinates': '2dsphere' });
-// teacherSchema.index({ subjects: 1, boards: 1, rating: -1 }); // Commented out due to parallel array indexing limitation
+teacherSchema.index({ skillCategories: 1, rating: -1 });
+teacherSchema.index({ teachingModes: 1 });
 
 module.exports = mongoose.model('Teacher', teacherSchema);

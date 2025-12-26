@@ -1,16 +1,20 @@
-# HomeTutor Platform
+# TutorX Platform
 
-A comprehensive MERN stack home tuition booking platform with real-time chat, audio calls, location-based teacher search, and Razorpay payment integration.
+A comprehensive MERN stack marketplace connecting learners with expert instructors. Learn any skill or teach what you know best. Support for online, offline, and hybrid modes with real-time chat, audio calls, and secure payments.
+
+## Platform Vision
+
+**"Learn Anything. Teach Anything."** - Master new skills from expert instructors, or monetize your expertise by teaching others. From music to coding, cooking to yoga - connect, learn, and grow together on our platform.
 
 ## Project Structure
 
 ```
-hometutor/
+tutorx/
 ├── backend/          # Node.js + Express backend
 │   ├── models/       # Mongoose schemas
 │   ├── routes/       # API endpoints
 │   ├── middleware/   # Auth & file upload middleware
-│   ├── utils/        # Helper functions
+│   ├── utils/        # Helper functions & constants
 │   └── server.js     # Main server with Socket.io
 └── frontend/         # React frontend
     ├── src/
@@ -18,27 +22,32 @@ hometutor/
     │   ├── pages/        # Page components
     │   ├── services/     # API and Socket.io services
     │   ├── context/      # Auth context
-    │   └── utils/        # Helper functions
+    │   └── utils/        # Helper functions & constants
     └── public/
 ```
 
 ## Features
 
 ✅ **Backend (Completed)**
-- User & Teacher authentication with JWT
-- Location-based teacher search with Haversine distance
+- Instructor & Learner authentication with JWT
+- Skill-based instructor profiles with categories
+- Teaching modes: Online, Offline, Hybrid
+- Location-based search (for offline/hybrid)
 - Booking system with Razorpay integration
-- Demo class workflow (payment hold/release/refund)
+- Session packages (demo, single, 5-pack, 10-pack, monthly)
 - Progress tracking system
 - Review & rating system
 - Real-time chat with Socket.io
 - Audio call signaling with WebRTC
-- File upload for photos, videos, and Aadhaar documents
+- File upload for photos and videos
 
 🚧 **Frontend (In Progress)**
+- ✅ Landing page with new "Anyone Can Teach" messaging
 - Authentication context and protected routes
 - API service with axios
 - Socket.io client service
+- Skill-based search and filters
+- Teaching mode selection
 - UI pages and components (to be completed)
 
 ## Tech Stack
@@ -62,6 +71,33 @@ hometutor/
 - Recharts for analytics
 - Lucide React for icons
 
+## Skill Categories
+
+The platform supports 16+ skill categories:
+- Music & Audio
+- Arts & Crafts
+- Cooking & Baking
+- Fitness & Yoga
+- Dance
+- Sports & Games
+- Technology & Programming
+- Languages
+- Photography & Video
+- Business & Marketing
+- Writing & Content
+- Design & Graphics
+- Personal Development
+- Academic Subjects
+- Test Preparation
+- Other
+
+## Teaching Modes
+
+Instructors can choose how they want to teach:
+- **Online**: Virtual classes via Zoom, Google Meet, etc.
+- **Offline**: In-person sessions at learner's location
+- **Hybrid**: Both online and offline options
+
 ## Setup Instructions
 
 ### Backend Setup
@@ -71,7 +107,7 @@ hometutor/
 cd backend
 ```
 
-2. Install dependencies (already done):
+2. Install dependencies:
 ```bash
 npm install
 ```
@@ -103,7 +139,7 @@ npm run dev
 cd frontend
 ```
 
-2. Install dependencies (already done):
+2. Install dependencies:
 ```bash
 npm install
 ```
@@ -122,14 +158,14 @@ npm start
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/register/student` - Register student
-- `POST /api/auth/register/teacher` - Register teacher
+- `POST /api/auth/register/student` - Register learner
+- `POST /api/auth/register/teacher` - Register instructor
 - `POST /api/auth/login` - Login
 
-### Teachers
-- `GET /api/teachers/search` - Search teachers with filters
-- `GET /api/teachers/:id` - Get teacher profile
-- `PUT /api/teachers/profile` - Update teacher profile
+### Instructors
+- `GET /api/teachers/search` - Search instructors with filters
+- `GET /api/teachers/:id` - Get instructor profile
+- `PUT /api/teachers/profile` - Update instructor profile
 - `POST /api/teachers/upload-photo` - Upload profile photo
 - `POST /api/teachers/upload-video` - Upload video
 
@@ -137,20 +173,20 @@ npm start
 - `POST /api/bookings` - Create booking
 - `GET /api/bookings` - Get all bookings
 - `GET /api/bookings/:id` - Get booking details
-- `POST /api/bookings/:id/complete-demo` - Complete demo class
+- `POST /api/bookings/:id/complete-demo` - Complete demo session
 - `PUT /api/bookings/:id/cancel` - Cancel booking
 - `POST /api/bookings/verify-payment` - Verify Razorpay payment
 
 ### Progress
 - `POST /api/progress` - Add progress entry
-- `GET /api/progress/:studentId` - Get student progress
+- `GET /api/progress/:studentId` - Get learner progress
 - `GET /api/progress/booking/:bookingId` - Get booking progress
 - `PUT /api/progress/:id` - Update progress
 - `DELETE /api/progress/:id` - Delete progress
 
 ### Reviews
 - `POST /api/reviews` - Submit review
-- `GET /api/reviews/teacher/:teacherId` - Get teacher reviews
+- `GET /api/reviews/teacher/:teacherId` - Get instructor reviews
 - `PUT /api/reviews/:id` - Update review
 - `DELETE /api/reviews/:id` - Delete review
 
@@ -183,17 +219,31 @@ npm start
 - `user-online` - User came online
 - `user-offline` - User went offline
 
+## Key Changes from Previous Version
+
+### Data Model Transformation
+- **Subjects → Skills**: Open-ended skill names instead of academic subjects
+- **Classes → Skill Levels**: Beginner, Intermediate, Advanced, All Levels
+- **Boards → Skill Categories**: 16+ predefined categories
+- **Teaching Modes**: Added online/offline/hybrid support
+- **Removed Aadhaar**: Completely removed verification requirement
+- **Session Packages**: Demo, single, 5-pack, 10-pack, monthly options
+
+### Platform Rebranding
+- **HomeTutor → TutorX**
+- **Students → Learners**
+- **Tutors → Instructors**
+- Focus on balanced two-sided marketplace for both learners and instructors
+
 ## Next Steps
 
 Frontend development continues with:
-- Landing page
-- Login and registration pages  
-- Student dashboard
-- Teacher dashboard
-- Teacher search with filters
-- Teacher profile page
-- Chat interface
-- Audio call component
+- Instructor registration with skill categories
+- Skill-based search with teaching mode filters
+- Booking flow with mode selection
+- Instructor profile with portfolio
+- Session package selection
+- Online meeting link integration
 - Progress tracking charts
 - Review components
 
@@ -205,7 +255,9 @@ Frontend development continues with:
 - Rate limiting on API endpoints
 - MongoDB injection prevention via Mongoose
 - CORS configuration for frontend
+- Strict enum validation to prevent input errors
 
 ## License
 
 This project is for educational purposes.
+
